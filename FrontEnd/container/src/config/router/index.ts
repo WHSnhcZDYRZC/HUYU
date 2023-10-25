@@ -1,7 +1,7 @@
 export default [
     {
         path: '/',
-        redirect: '/application',
+        redirect: '/application/',
     },
     {
         name: '个人中心',
@@ -15,7 +15,8 @@ export default [
     },
     {
         name: '文章中心',
-        path: '/application',
+        originalPath: "/application/",
+        path: '/application/*',
         microApp: 'application',
     },
 ];

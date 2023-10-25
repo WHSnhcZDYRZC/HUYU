@@ -9,10 +9,12 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@ant-design/pro-layout": "^7.17.10",
     "antd": "^5.10.2",
     "axios": "^1.5.1",
-    "umi": "^4.0.87"
+    "umi": "^4.0.87",
+    "zustand": "^4.4.4"
   },
   "devDependencies": {
     "@types/react": "^18.0.33",

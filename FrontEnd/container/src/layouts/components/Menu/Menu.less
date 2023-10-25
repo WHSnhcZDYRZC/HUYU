@@ -1,18 +1,49 @@
 .menu {
     box-sizing: border-box;
     height: 100%;
-    width: 15%;
+    // width: 15%;
     display: inline-block;
     border-right: 1px solid #f0f0f0;
+    overflow: hidden;
 
     :global {
         .user-box {
+            display: flex;
             padding: 10px;
             text-align: center;
+            justify-content: center;
+
+            p {
+                margin-left: 10px;
+            }
         }
 
         .ant-menu {
+            width: 100%;
             border-inline-end: 0 !important;
+        }
+
+        .first-name {
+            width: 25px;
+            height: 25px;
+            text-align: center;
+            line-height: 25px;
+            background-color: #c84c4f;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .ant-menu-item-selected {
+            background-color: #f4e0e0;
+            color: #ca5356;
+        }
+
+        .ant-menu-item:active {
+            background-color: #f0f0f0 !important;
+        }
+
+        .ant-menu-submenu-selected>.ant-menu-submenu-title {
+            color: #ca5356;
         }
     }
 }

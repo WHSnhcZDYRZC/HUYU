@@ -4,8 +4,33 @@ import { Menu } from 'antd';
 import styled from './Menu.less';
 import router from '@/config/router';
 import { history } from 'umi';
+import { useEffect, useMemo, useState } from 'react';
+import useMenuStore, { MenuStateInf } from '@/store/menuStore';
 
-console.log("router", router);
+const pageData = [
+    {
+        label: "Java",
+        key: "Java1",
+        id: "1023"
+    },
+    {
+        label: "Js",
+        key: "Js1",
+        id: "1024",
+        children: [
+            {
+                label: "JavaScript 是什么",
+                key: "Js2",
+                id: "1025",
+            },
+            {
+                label: "JavaScript 是什么2",
+                key: "Js3",
+                id: "1026",
+            }
+        ]
+    }
+]
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -25,9 +50,12 @@ function getItem(
     } as MenuItem;
 }
 
+// 临时代码
 const necessityRouter = router.filter((v) => (v.name && v.name != "文章中心"))
 
-console.log("necessityRouter", necessityRouter);
+const articleRouter = router.find(v => v.name === '文章中心');
+
+const activeRouter = router.find(v => v.path === history.location.pathname)
 
 const items: MenuProps['items'] = [
     getItem(null, 'grp', null,
@@ -36,32 +64,58 @@ const items: MenuProps['items'] = [
 
     { type: 'divider' },
 
-    getItem('Navigation Two', 'sub2', <FileWordOutlined />, [
-        getItem('Option 5', '5'),
-        getItem('Option 6', '6'),
-        getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
-    ]),
+    ...pageData.map(v => {
+        if (v.children?.length) {
+            return getItem(v.label, v.key, <FileWordOutlined />,
+                v.children.map(o => {
+                    return getItem(o.label, articleRouter?.originalPath + o.key)
+                })
+            );
+        }
 
-    getItem('Navigation Three', 'sub4', <FileWordOutlined />, [
-        getItem('Option 9', '9'),
-        getItem('Option 10', '10'),
-        getItem('Option 11', '11'),
-        getItem('Option 12', '12'),
-    ]),
-
-
+        return getItem(v.label, articleRouter?.originalPath + v.key, <FileWordOutlined />)
+    }),
 ];
 
 export default () => {
-    const onClick: MenuProps['onClick'] = (e) => history.push(e.key);
+    const [userName, setUserName] = useState("HuYu")
+    const [menuKey, setMenuKey] = useState(history.location.pathname)
+
+    const setBreadcrumb = useMenuStore((state: any) => state.setBreadcrumb)
+
+    const init = () => {
+        setBreadcrumb(activeRouter?.name)
+    }
+
+    useEffect(() => {
+        init();
+    }, [])
+
+    const onClick: MenuProps['onClick'] = (e) => {
+        setBreadcrumb((e.domEvent.target as any).innerText);
+        setMenuKey(e.key)
+        history.push(e.key);
+    }
+
+    const collapsed = useMenuStore((state: any) => state.collapsed);
+
+    const nameBox = useMemo(() => <div className='first-name'>{userName[0]}</div>, [userName])
 
     return (
-        <div className={styled.menu}>
-            <div className='user-box'> xxx 个人空间 </div>
+        <div className={styled.menu} style={collapsed ? {
+            width: "5%"
+        } : {
+            width: "15%"
+        }}>
+            <div className='user-box'>
+                {nameBox}
+                {collapsed ? "" :
+                    <p>{userName + "个人空间"}</p>
+                } </div>
             <Menu
+                inlineCollapsed={collapsed}
                 onClick={onClick}
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
+                selectedKeys={[menuKey]}
                 mode="inline"
                 items={items}
             >
