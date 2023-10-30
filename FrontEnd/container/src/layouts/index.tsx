@@ -6,9 +6,9 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import useMenuStore from '@/store/menuStore';
 
 export default () => {
-  const breadcrumb = useMenuStore((state: any) => state.breadcrumb)
-  const setCollapsed = useMenuStore((state: any) => state.setCollapsed)
-  const collapsed = useMenuStore((state: any) => state.collapsed)
+  const breadcrumb = useMenuStore((state) => state.breadcrumb)
+  const setCollapsed = useMenuStore((state) => state.setCollapsed)
+  const collapsed = useMenuStore((state) => state.collapsed)
 
   return (
     <div className={styles.layout}>

@@ -97,7 +97,7 @@ export default () => {
         history.push(e.key);
     }
 
-    const collapsed = useMenuStore((state: any) => state.collapsed);
+    const collapsed = useMenuStore((state) => state.collapsed);
 
     const nameBox = useMemo(() => <div className='first-name'>{userName[0]}</div>, [userName])
 
