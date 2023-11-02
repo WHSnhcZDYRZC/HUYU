@@ -4,7 +4,7 @@ import { Menu } from 'antd';
 import styled from './Menu.less';
 import router from '@/config/router';
 import { history } from 'umi';
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useMenuStore, { MenuStateInf } from '@/store/menuStore';
 
 interface MenuItemInf {
@@ -47,7 +47,6 @@ const pageRouters: MenuItemInf[] = [
     }
 ]
 
-
 // 临时代码
 const activeRouter = [...router, ...pageRouters].find(v => v.path === history.location.pathname)
 console.log("router", router, history);
@@ -55,14 +54,15 @@ console.log("router", router, history);
 const ActiveClassName = "active";
 
 const MenuItems: React.FC = memo(() => {
-    const _router: MenuItemInf[] = JSON.parse(JSON.stringify(router.filter(v => v.name)))
-        .map(({ name, path, originalPath, isHidden }: any) => {
+    const _router: MenuItemInf[] = router.filter(v => v.name)
+        .map(({ name, path, originalPath, isHidden, icon }: any) => {
             return {
                 label: name,
                 key: name,
                 path: isHidden ? originalPath : path,
                 id: name,
-                isHidden
+                isHidden,
+                icon,
             }
         });
 
@@ -78,11 +78,8 @@ const MenuItems: React.FC = memo(() => {
     }
 
     const init = () => {
-        console.log("menuRefs.current", menuRefs.current);
-
         const routerIdx = [...Object.keys(menuRefs.current)].find(v => menuRefs.current[v].path === activeRouter?.path);
 
-        console.log("routerIdx", routerIdx, activeRouter);
         const _activeRouter = routerIdx ? menuRefs.current[routerIdx] : null;
 
         if (_activeRouter) {
@@ -93,7 +90,9 @@ const MenuItems: React.FC = memo(() => {
 
     const [_pageRouters, _setPageRouters] = useState(pageRouters);
 
-    const checkedOpenIconHandler = (v: MenuItemInf) => {
+    const checkedOpenIconHandler = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, v: MenuItemInf) => {
+        e.stopPropagation();
+
         _setPageRouters((old) => {
             const changeItem = old.find(o => o.path === v.path)
             changeItem && (changeItem.isOpen = !changeItem.isOpen);
@@ -101,22 +100,29 @@ const MenuItems: React.FC = memo(() => {
         })
     }
 
-    const userMenu = useMemo(() => {
-        const handler = (router: MenuItemInf[]) => {
-            return router.filter(v => !v.isHidden).map((v, i: number) => {
-                return (
+    const menuRefs = useRef<any>({});
+
+    const menuHandler = (router: MenuItemInf[], /* level = 0 */): any => {
+        // level++;
+        return router.filter(v => !v.isHidden).map((v, i: number) => {
+
+            return (
+                <>
                     <div
                         ref={r => menuRefs.current[v.path] = { dom: r, ...v }}
-                        className='menu-item'
+                        className='menu-item animate__animated animate__bounceIn'
                         onClick={() => menuItemClickHandler(v)}
-                        key={v.id}
+                        /* style={{
+                            paddingLeft: level * 10 + "px"
+                        }} */
+                        key={v.path}
                     >
                         {
                             v.children?.length ?
 
                                 <span className='childern-icon'>
                                     {
-                                        v.isOpen ? <DownOutlined onClick={() => checkedOpenIconHandler(v)} /> : <RightOutlined onClick={() => checkedOpenIconHandler(v)} />
+                                        v.isOpen ? <DownOutlined onClick={(e) => checkedOpenIconHandler(e, v)} /> : <RightOutlined onClick={(e) => checkedOpenIconHandler(e, v)} />
                                     }
                                 </span>
                                 : ""
@@ -124,7 +130,9 @@ const MenuItems: React.FC = memo(() => {
                         }
 
                         <span className='icon'>
-
+                            {
+                                v.icon ? React.createElement(v.icon) : <FileWordOutlined />
+                            }
                         </span>
                         <span className='label'>
                             {v.label}
@@ -133,87 +141,39 @@ const MenuItems: React.FC = memo(() => {
 
                         </span>
 
-                        {
-                            v.children ? handler(v.children) : <></>
-                        }
-                    </div>
-                )
-            })
-        }
 
-        return handler(_pageRouters)
+                    </div>
+
+                    {
+                        v.children && v.isOpen ? menuHandler(v.children/* , level */) : <></>
+                    }
+                </>
+            )
+        })
+    }
+
+    const userMenu = useMemo(() => {
+        return menuHandler(_pageRouters)
     }, [_pageRouters])
+
+    const systemMenu = useMemo(() => {
+        return menuHandler(_router)
+    }, [_router])
+
 
     useEffect(() => {
         init();
     }, [])
 
 
-    const menuRefs = useRef<any>({});
-
     return (
         <>
             <div className='system-router router-flex'>
-                {
-                    _router.filter(v => !v.isHidden).map((v, i: number) => {
-                        return (
-                            <div
-                                ref={r => menuRefs.current[v.path] = { dom: r, ...v }}
-                                className='menu-item'
-                                onClick={() => menuItemClickHandler(v)}
-                                key={v.id}
-                            >
-                                <span className='icon'>
-
-                                </span>
-                                <span className='label'>
-                                    {v.label}
-                                </span>
-                                <span className='more'>
-
-                                </span>
-                            </div>
-                        )
-                    })
-                }
+                {systemMenu}
             </div>
 
             <div className='user-router router-flex'>
-                { userMenu }
-                {/* {
-                    _pageRouters.filter(v => !v.isHidden).map((v, i: number) => {
-                        return (
-                            <div
-                                ref={r => menuRefs.current[v.path] = { dom: r, ...v }}
-                                className='menu-item'
-                                onClick={() => menuItemClickHandler(v)}
-                                key={v.id}
-                            >
-                                {
-                                    v.children?.length ?
-
-                                        <span className='childern-icon'>
-                                            {
-                                                v.isOpen ? <DownOutlined onClick={() => checkedOpenIconHandler(v)} /> : <RightOutlined onClick={() => checkedOpenIconHandler(v)} />
-                                            }
-                                        </span>
-                                        : ""
-
-                                }
-
-                                <span className='icon'>
-
-                                </span>
-                                <span className='label'>
-                                    {v.label}
-                                </span>
-                                <span className='more'>
-
-                                </span>
-                            </div>
-                        )
-                    })
-                } */}
+                {userMenu}
             </div>
         </>
     )
@@ -244,29 +204,22 @@ export default () => {
     const nameBox = useMemo(() => <div className='first-name'>{userName[0]}</div>, [userName])
 
     return (
-        <div className={styled.menu} style={collapsed ? {
-            width: "0%"
-        } : {
-            width: "15%"
-        }}>
-            <div className='user-box'>
-                {nameBox}
-                {collapsed ? "" :
-                    <p>{userName + "个人空间"}</p>
-                } </div>
+        <>
+            <div className={styled.menu} style={collapsed ? {
+                width: "0%"
+            } : {
+                width: "15%"
+            }}>
+                <div className='user-box animate__animated animate__bounceIn'>
+                    {nameBox}
+                    {collapsed ? "" :
+                        <p>{userName + "个人空间"}</p>
+                    } </div>
 
-            <div className='menu'>
-                <MenuItems />
+                <div className='menu'>
+                    <MenuItems />
+                </div>
             </div>
-
-            {/* <Menu
-                inlineCollapsed={collapsed}
-                onClick={onClick}
-                selectedKeys={[menuKey]}
-                mode="inline"
-                items={items}
-            >
-            </Menu> */}
-        </div>
+        </>
     )
 }

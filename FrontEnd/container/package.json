@@ -11,6 +11,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "@ant-design/pro-layout": "^7.17.10",
+    "animate.css": "^4.1.1",
     "antd": "^5.10.2",
     "axios": "^1.5.1",
     "umi": "^4.0.87",

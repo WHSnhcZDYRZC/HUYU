@@ -1,3 +1,5 @@
+import 'animate.css';
+
 export const qiankun = {
     apps: [
         {
