@@ -1,4 +1,4 @@
-import { DownOutlined, FileWordOutlined, HomeOutlined, RightOutlined, SettingOutlined, UpOutlined } from '@ant-design/icons';
+import { DownOutlined, EllipsisOutlined, FileAddOutlined, FileWordOutlined, HomeOutlined, RightOutlined, SettingOutlined, UpOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import styled from './Menu.less';
@@ -7,6 +7,7 @@ import { history } from 'umi';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useMenuStore, { MenuStateInf } from '@/store/menuStore';
 import Animation from '@/components/Animation/Animation';
+import { getUuid } from '@/utils';
 
 interface MenuItemInf {
     children?: MenuItemInf[],
@@ -67,15 +68,18 @@ const MenuItems: React.FC = memo(() => {
             }
         });
 
+    const clearRefClassName = () => {
+        Object.keys(menuRefs.current).forEach(v =>
+            menuRefs.current[v].dom.classList.remove(ActiveClassName, "childActive"))
+    };
+
     const menuItemClickHandler = (routerItemData: MenuItemInf) => {
         const activeItem = menuRefs.current[routerItemData.path].dom;
 
         const haveClassName = [...activeItem.classList].some((v: string) => v === ActiveClassName);
         if (haveClassName) return;
-        Object.keys(menuRefs.current).forEach(v =>
-            menuRefs.current[v].dom.classList.remove(ActiveClassName, "childActive"))
+        clearRefClassName();
         activeItem.classList.add(ActiveClassName);
-
         setBreadcrumb(routerItemData.label);
         history.push(routerItemData.path);
     }
@@ -85,13 +89,14 @@ const MenuItems: React.FC = memo(() => {
 
         const _activeRouter = routerIdx ? menuRefs.current[routerIdx] : null;
 
+        if (!_activeRouter) return;
+
         const { path } = _activeRouter
 
+        clearRefClassName();
         let activePath = path.split("/")
-        console.log("activePath", activePath);
         if (activePath.length > 3) {
             activePath = activePath.slice(0, 3).join("/");
-
             menuRefs.current[activePath].dom.classList.add("childActive")
         }
 
@@ -106,17 +111,41 @@ const MenuItems: React.FC = memo(() => {
         e.stopPropagation();
 
         _setPageRouters((old) => {
-            const changeItem = old.find(o => o.path === v.path)
-            changeItem && (changeItem.isOpen = !changeItem.isOpen);
+            // const changeItem = old.find(o => o.path === v.path)
+
+            // console.log(e, v, changeItem);
+
+            // changeItem && (v.isOpen = !v.isOpen);
+            v.isOpen = !v.isOpen
             return JSON.parse(JSON.stringify(old));
         })
     }
 
     const menuRefs = useRef<any>({});
 
-    const menuHandler = (router: MenuItemInf[]): any => {
-        return router.filter(v => !v.isHidden).map((v, i: number) => {
+    const addPageRouterHandler = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, v: MenuItemInf) => {
+        e.stopPropagation();
 
+        const uuid = getUuid()
+
+        const dataItem = {
+            id: uuid,
+            key: uuid,
+            label: "新增演示",
+            path: v.path + "/" + uuid
+        }
+
+        v.children = v.children?.length ? [...v.children, dataItem] : [dataItem];
+        v.isOpen = true;
+
+        _setPageRouters(JSON.parse(JSON.stringify(_pageRouters)))
+
+        history.push(dataItem.path);
+    }
+
+    const menuHandler = (router: MenuItemInf[], haveMore?: boolean, level = 0): any => {
+        level++;
+        return router.filter(v => !v.isHidden).map((v, i: number) => {
             return (
                 <>
                     <div
@@ -125,29 +154,37 @@ const MenuItems: React.FC = memo(() => {
                         onClick={() => menuItemClickHandler(v)}
                         key={v.path}
                     >
-                        {
-                            v.children?.length ?
+                        <span className='children-icon' style={{ marginLeft: level * 10 + "px" }} >
+                            {
+                                v.children?.length ?
 
-                                <span className='children-icon'>
-                                    {
-                                        v.isOpen ? <DownOutlined onClick={(e) => checkedOpenIconHandler(e, v)} /> : <RightOutlined onClick={(e) => checkedOpenIconHandler(e, v)} />
-                                    }
-                                </span>
-                                : ""
+                                    <>
+                                        {
+                                            v.isOpen ? <DownOutlined onClick={(e) => checkedOpenIconHandler(e, v)} /> : <RightOutlined onClick={(e) => checkedOpenIconHandler(e, v)} />
+                                        }
+                                    </>
+                                    : ""
 
-                        }
+                            }
+                        </span>
 
-                        <span className='icon'>
+                        <span className='icon' >
                             {
                                 v.icon ? React.createElement(v.icon) : <FileWordOutlined />
                             }
                         </span>
-                        <span className='label'>
+                        <span className='label overflowEllipsis'>
                             {v.label}
                         </span>
-                        <span className='more'>
 
-                        </span>
+                        {
+                            haveMore ?
+                                <span className='more'>
+                                    <EllipsisOutlined />
+                                    <FileAddOutlined onClick={(e) => addPageRouterHandler(e, v)} />
+                                </span> : <></>
+                        }
+
 
 
                     </div>
@@ -156,7 +193,7 @@ const MenuItems: React.FC = memo(() => {
                         v.children ?
                             <div className={v.isOpen ? 'childShow' : 'childHidden'}>
                                 {
-                                    menuHandler(v.children)
+                                    menuHandler(v.children, haveMore, level)
                                 }
                             </div>
                             : <></>
@@ -167,7 +204,7 @@ const MenuItems: React.FC = memo(() => {
     }
 
     const userMenu = useMemo(() => {
-        return menuHandler(_pageRouters)
+        return menuHandler(_pageRouters, true)
     }, [_pageRouters])
 
     const systemMenu = useMemo(() => {
@@ -176,7 +213,7 @@ const MenuItems: React.FC = memo(() => {
 
     useEffect(() => {
         init();
-    }, [])
+    }, [_pageRouters])
 
     return (
         <>
