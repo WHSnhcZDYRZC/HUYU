@@ -18,5 +18,6 @@ export default [
         originalPath: "/application/",
         path: '/application/*',
         microApp: 'application',
+        isHidden: true,
     },
 ];

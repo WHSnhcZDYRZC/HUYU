@@ -33,17 +33,75 @@
             border-radius: 5px;
         }
 
-        .ant-menu-item-selected {
-            background-color: #f4e0e0;
-            color: #ca5356;
-        }
 
-        .ant-menu-item:active {
-            background-color: #f0f0f0 !important;
-        }
 
-        .ant-menu-submenu-selected>.ant-menu-submenu-title {
-            color: #ca5356;
+        // .ant-menu-item-selected {
+        //     background-color: #f4e0e0;
+        //     color: #ca5356;
+        // }
+
+        // .ant-menu-item:active {
+        //     background-color: #f0f0f0 !important;
+        // }
+
+        // .ant-menu-submenu-selected>.ant-menu-submenu-title {
+        //     color: #ca5356;
+        // }
+
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            .router-flex {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .system-router {
+                width: 100%;
+                border-bottom: 1px solid #eeeeee;
+            }
+
+            .user-router {
+                width: 100%;
+                margin-top: 5px;
+            }
+
+            .menu-item {
+                border-radius: 5px;
+                padding: 10px;
+                width: 80%;
+                color: #555555;
+                margin-bottom: 5px;
+                font-size: 14px;
+                display: flex;
+                // align-items: center;
+                // justify-items: center;
+
+                span {
+                    margin-left: 5px;
+                }
+            }
+
+            .menu-item:hover {
+                background-color: #eeeeee;
+            }
+
+            .active {
+                background-color: #f4e0e0;
+                color: #ca5356;
+            }
+
+            .active:hover {
+                background-color: #f4e0e0;
+                color: #ca5356;
+            }
+
+
         }
     }
+
+
 }

@@ -14,7 +14,7 @@ export default () => {
     <div className={styles.layout}>
       <Menu />
       <div className='main' style={collapsed ? {
-        width: "95%"
+        width: "99.9%"
       } : {
         width: "85%"
       }}>
