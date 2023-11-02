@@ -10,7 +10,9 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "@lexical/react": "^0.12.2",
     "@umijs/plugins": "^4.0.87",
+    "lexical": "^0.12.2",
     "qiankun": "^2.10.14",
     "umi": "^4.0.87"
   },

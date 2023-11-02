@@ -8,4 +8,7 @@ export default defineConfig({
   plugins: ['@umijs/plugins/dist/qiankun'],
   routes,
   npmClient: 'pnpm',
+  favicons: [
+    "/icon.svg"
+  ]
 });

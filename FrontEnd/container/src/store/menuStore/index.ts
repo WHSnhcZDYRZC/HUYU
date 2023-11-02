@@ -7,13 +7,19 @@ export interface MenuStateInf {
     setBreadcrumb: (str: string) => any
 }
 
+
+
 const useStore = create<MenuStateInf>((set) => ({
-    collapsed: false,
+    collapsed: window.innerWidth > 1200 ? false : true,
     breadcrumb: "",
 
     setCollapsed: (is: boolean) => set(() => ({ collapsed: is })),
 
-    setBreadcrumb: (str: string) => set(() => ({ breadcrumb: str }))
+    setBreadcrumb: (str: string) => set(() => {
+        document.title = str || "HuYu 笔记";
+
+        return { breadcrumb: str }
+    })
 }))
 
 export default useStore;
