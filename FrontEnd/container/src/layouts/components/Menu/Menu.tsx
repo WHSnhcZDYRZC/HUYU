@@ -6,6 +6,7 @@ import router from '@/config/router';
 import { history } from 'umi';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useMenuStore, { MenuStateInf } from '@/store/menuStore';
+import Animation from '@/components/Animation/Animation';
 
 interface MenuItemInf {
     children?: MenuItemInf[],
@@ -48,12 +49,12 @@ const pageRouters: MenuItemInf[] = [
 ]
 
 // 临时代码
-const activeRouter = [...router, ...pageRouters].find(v => v.path === history.location.pathname)
-console.log("router", router, history);
-
 const ActiveClassName = "active";
 
 const MenuItems: React.FC = memo(() => {
+    const setBreadcrumb = useMenuStore((state: any) => state.setBreadcrumb)
+    const [_pageRouters, _setPageRouters] = useState<MenuItemInf[]>(pageRouters);
+
     const _router: MenuItemInf[] = router.filter(v => v.name)
         .map(({ name, path, originalPath, isHidden, icon }: any) => {
             return {
@@ -71,24 +72,35 @@ const MenuItems: React.FC = memo(() => {
 
         const haveClassName = [...activeItem.classList].some((v: string) => v === ActiveClassName);
         if (haveClassName) return;
-        Object.keys(menuRefs.current).forEach(v => menuRefs.current[v].dom.classList.remove(ActiveClassName))
+        Object.keys(menuRefs.current).forEach(v =>
+            menuRefs.current[v].dom.classList.remove(ActiveClassName, "childActive"))
         activeItem.classList.add(ActiveClassName);
 
+        setBreadcrumb(routerItemData.label);
         history.push(routerItemData.path);
     }
 
     const init = () => {
-        const routerIdx = [...Object.keys(menuRefs.current)].find(v => menuRefs.current[v].path === activeRouter?.path);
+        const routerIdx = [...Object.keys(menuRefs.current)].find(v => menuRefs.current[v].path === history.location.pathname);
 
         const _activeRouter = routerIdx ? menuRefs.current[routerIdx] : null;
 
+        const { path } = _activeRouter
+
+        let activePath = path.split("/")
+        console.log("activePath", activePath);
+        if (activePath.length > 3) {
+            activePath = activePath.slice(0, 3).join("/");
+
+            menuRefs.current[activePath].dom.classList.add("childActive")
+        }
+
         if (_activeRouter) {
             _activeRouter.dom.classList.add(ActiveClassName);
+            setBreadcrumb(_activeRouter?.label)
         }
 
     }
-
-    const [_pageRouters, _setPageRouters] = useState(pageRouters);
 
     const checkedOpenIconHandler = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, v: MenuItemInf) => {
         e.stopPropagation();
@@ -102,25 +114,21 @@ const MenuItems: React.FC = memo(() => {
 
     const menuRefs = useRef<any>({});
 
-    const menuHandler = (router: MenuItemInf[], /* level = 0 */): any => {
-        // level++;
+    const menuHandler = (router: MenuItemInf[]): any => {
         return router.filter(v => !v.isHidden).map((v, i: number) => {
 
             return (
                 <>
                     <div
                         ref={r => menuRefs.current[v.path] = { dom: r, ...v }}
-                        className='menu-item animate__animated animate__bounceIn'
+                        className='menu-item'
                         onClick={() => menuItemClickHandler(v)}
-                        /* style={{
-                            paddingLeft: level * 10 + "px"
-                        }} */
                         key={v.path}
                     >
                         {
                             v.children?.length ?
 
-                                <span className='childern-icon'>
+                                <span className='children-icon'>
                                     {
                                         v.isOpen ? <DownOutlined onClick={(e) => checkedOpenIconHandler(e, v)} /> : <RightOutlined onClick={(e) => checkedOpenIconHandler(e, v)} />
                                     }
@@ -145,7 +153,13 @@ const MenuItems: React.FC = memo(() => {
                     </div>
 
                     {
-                        v.children && v.isOpen ? menuHandler(v.children/* , level */) : <></>
+                        v.children ?
+                            <div className={v.isOpen ? 'childShow' : 'childHidden'}>
+                                {
+                                    menuHandler(v.children)
+                                }
+                            </div>
+                            : <></>
                     }
                 </>
             )
@@ -160,11 +174,9 @@ const MenuItems: React.FC = memo(() => {
         return menuHandler(_router)
     }, [_router])
 
-
     useEffect(() => {
         init();
     }, [])
-
 
     return (
         <>
@@ -183,38 +195,22 @@ export default () => {
     const [userName, setUserName] = useState("HuYu")
     const [menuKey, setMenuKey] = useState(history.location.pathname)
 
-    const setBreadcrumb = useMenuStore((state: any) => state.setBreadcrumb)
-
-    const init = () => {
-        setBreadcrumb(activeRouter?.name)
-    }
-
-    useEffect(() => {
-        init();
-    }, [])
-
-    const onClick: MenuProps['onClick'] = (e) => {
-        setBreadcrumb((e.domEvent.target as any).innerText);
-        setMenuKey(e.key)
-        history.push(e.key);
-    }
-
     const collapsed = useMenuStore((state) => state.collapsed);
 
     const nameBox = useMemo(() => <div className='first-name'>{userName[0]}</div>, [userName])
 
     return (
         <>
-            <div className={styled.menu} style={collapsed ? {
-                width: "0%"
-            } : {
-                width: "15%"
-            }}>
-                <div className='user-box animate__animated animate__bounceIn'>
-                    {nameBox}
-                    {collapsed ? "" :
+            <div id='rootMenu' className={`${styled.menu} ${!collapsed ? "width15" : "width0"}`}>
+
+                <Animation
+                    className='user-box' animationName='animate__bounceIn'
+                >
+                    <>
+                        {nameBox}
                         <p>{userName + "个人空间"}</p>
-                    } </div>
+                    </>
+                </Animation>
 
                 <div className='menu'>
                     <MenuItems />

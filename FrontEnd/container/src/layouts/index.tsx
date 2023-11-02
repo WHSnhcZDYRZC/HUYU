@@ -14,11 +14,7 @@ export default () => {
   return (
     <div className={styles.layout}>
       <Menu />
-      <div className='main' style={collapsed ? {
-        width: "99.9%"
-      } : {
-        width: "85%"
-      }}>
+      <div id='rootMain' className={`main ${!collapsed ? 'width85' : 'width99'}`}>
         <div className='main-nav'>
           <Button onClick={() => setCollapsed(!collapsed)} type="dashed" icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} />
           <p>

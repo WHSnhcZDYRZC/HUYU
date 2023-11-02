@@ -99,3 +99,6 @@ export const convertToCurrencyFormat = (num: number): string | any => {
 
 export const copyTextToClipboard = (text: string) =>
   navigator.clipboard.writeText(text).then(() => message.success("复制成功!"))
+
+
+  export const $ = (keyword: string) => document.querySelector(keyword)
