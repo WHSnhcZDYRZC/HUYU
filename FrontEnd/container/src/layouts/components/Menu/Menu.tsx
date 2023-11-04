@@ -131,7 +131,7 @@ const MenuItems: React.FC = memo(() => {
         const dataItem = {
             id: uuid,
             key: uuid,
-            label: "新增演示",
+            label: "新页面",
             path: v.path + "/" + uuid
         }
 

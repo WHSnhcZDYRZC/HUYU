@@ -70,8 +70,19 @@
             }
 
             .main-con {
-                padding: 50px;
+                height: calc(100% - 43px);
+                // padding: 50px;
             }
         }
     }
+}
+
+&::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+&::-webkit-scrollbar-thumb {
+    background: #999;
+    border-radius: 30px;
 }

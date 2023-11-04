@@ -1,0 +1,462 @@
+@import 'https://fonts.googleapis.com/css?family=Reenie+Beanie';
+
+.qiankun-micro-app-container {
+    // height: 100%;
+}
+
+.typeahead-popover {
+    background: #fff;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    margin-top: 25px;
+}
+
+.typeahead-popover ul {
+    padding: 0;
+    list-style: none;
+    margin: 0;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
+.typeahead-popover ul::-webkit-scrollbar {
+    display: none;
+}
+
+.typeahead-popover ul {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.typeahead-popover ul li {
+    margin: 0;
+    min-width: 180px;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.typeahead-popover ul li.selected {
+    background: #eee;
+}
+
+.typeahead-popover li {
+    margin: 0 8px 0 8px;
+    padding: 8px;
+    color: #050505;
+    cursor: pointer;
+    line-height: 16px;
+    font-size: 15px;
+    display: flex;
+    align-content: center;
+    flex-direction: row;
+    flex-shrink: 0;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 0;
+}
+
+.typeahead-popover li.active {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+}
+
+.typeahead-popover li:first-child {
+    border-radius: 8px 8px 0px 0px;
+}
+
+.typeahead-popover li:last-child {
+    border-radius: 0px 0px 8px 8px;
+}
+
+.typeahead-popover li:hover {
+    background-color: #eee;
+}
+
+.typeahead-popover li .text {
+    display: flex;
+    line-height: 20px;
+    flex-grow: 1;
+    min-width: 150px;
+}
+
+.typeahead-popover li .icon {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    user-select: none;
+    margin-right: 8px;
+    line-height: 16px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.component-picker-menu {
+    width: 200px;
+}
+
+.icon.paragraph {
+    background-image: url(../src/components/Editor/images/icons/text-paragraph.svg);
+}
+
+.icon.h1 {
+    background-image: url(../src/components/Editor/images/icons/type-h1.svg);
+}
+
+.icon.h2 {
+    background-image: url(../src/components/Editor/images/icons/type-h2.svg);
+}
+
+.icon.h3 {
+    background-image: url(../src/components/Editor/images/icons/type-h3.svg);
+}
+
+.icon.h4 {
+    background-image: url(../src/components/Editor/images/icons/type-h4.svg);
+}
+
+.icon.h5 {
+    background-image: url(../src/components/Editor/images/icons/type-h5.svg);
+}
+
+.icon.h6 {
+    background-image: url(../src/components/Editor/images/icons/type-h6.svg);
+}
+
+.icon.bullet-list,
+.icon.bullet {
+    background-image: url(../src/components/Editor/images/icons/list-ul.svg);
+}
+
+.icon.check-list,
+.icon.check {
+    background-image: url(../src/components/Editor/images/icons/square-check.svg);
+}
+
+.icon.numbered-list,
+.icon.number {
+    background-image: url(../src/components/Editor/images/icons/list-ol.svg);
+}
+
+.icon.quote {
+    background-image: url(../src/components/Editor/images/icons/chat-square-quote.svg);
+}
+
+.icon.code {
+    background-image: url(../src/components/Editor/images/icons/code.svg);
+}
+
+
+i.palette {
+    background-image: url(../src/components/Editor/images/icons/palette.svg);
+}
+
+i.bucket {
+    background-image: url(../src/components/Editor/images/icons/paint-bucket.svg);
+}
+
+i.bold {
+    background-image: url(../src/components/Editor/images/icons/type-bold.svg);
+}
+
+i.italic {
+    background-image: url(../src/components/Editor/images/icons/type-italic.svg);
+}
+
+i.clear {
+    background-image: url(../src/components/Editor/images/icons/trash.svg);
+}
+
+i.code {
+    background-image: url(../src/components/Editor/images/icons/code.svg);
+}
+
+i.underline {
+    background-image: url(../src/components/Editor/images/icons/type-underline.svg);
+}
+
+i.strikethrough {
+    background-image: url(../src/components/Editor/images/icons/type-strikethrough.svg);
+}
+
+i.subscript {
+    background-image: url(../src/components/Editor/images/icons/type-subscript.svg);
+}
+
+i.superscript {
+    background-image: url(../src/components/Editor/images/icons/type-superscript.svg);
+}
+
+i.link {
+    background-image: url(../src/components/Editor/images/icons/link.svg);
+}
+
+i.horizontal-rule {
+    background-image: url(../src/components/Editor/images/icons/horizontal-rule.svg);
+}
+
+.icon.plus {
+    background-image: url(../src/components/Editor/images/icons/plus.svg);
+}
+
+.icon.caret-right {
+    background-image: url(../src/components/Editor/images/icons/caret-right-fill.svg);
+}
+
+.icon.dropdown-more {
+    background-image: url(../src/components/Editor/images/icons/dropdown-more.svg);
+}
+
+.icon.font-color {
+    background-image: url(../src/components/Editor/images/icons/font-color.svg);
+}
+
+.icon.font-family {
+    background-image: url(../src/components/Editor/images/icons/font-family.svg);
+}
+
+.icon.bg-color {
+    background-image: url(../src/components/Editor/images/icons/bg-color.svg);
+}
+
+.icon.table {
+    background-color: #6c757d;
+    mask-image: url(../src/components/Editor/images/icons/table.svg);
+    -webkit-mask-image: url(../src/components/Editor/images/icons/table.svg);
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+}
+
+i.image {
+    background-image: url(../src/components/Editor/images/icons/file-image.svg);
+}
+
+i.table {
+    background-image: url(../src/components/Editor/images/icons/table.svg);
+}
+
+i.close {
+    background-image: url(../src/components/Editor/images/icons/close.svg);
+}
+
+i.figma {
+    background-image: url(../src/components/Editor/images/icons/figma.svg);
+}
+
+i.poll {
+    background-image: url(../src/components/Editor/images/icons/card-checklist.svg);
+}
+
+i.columns {
+    background-image: url(../src/components/Editor/images/icons/3-columns.svg);
+}
+
+i.tweet {
+    background-image: url(../src/components/Editor/images/icons/tweet.svg);
+}
+
+i.youtube {
+    background-image: url(../src/components/Editor/images/icons/youtube.svg);
+}
+
+.icon.left-align,
+i.left-align {
+    background-image: url(../src/components/Editor/images/icons/text-left.svg);
+}
+
+.icon.center-align,
+i.center-align {
+    background-image: url(../src/components/Editor/images/icons/text-center.svg);
+}
+
+.icon.right-align,
+i.right-align {
+    background-image: url(../src/components/Editor/images/icons/text-right.svg);
+}
+
+.icon.justify-align,
+i.justify-align {
+    background-image: url(../src/components/Editor/images/icons/justify.svg);
+}
+
+i.indent {
+    background-image: url(../src/components/Editor/images/icons/indent.svg);
+}
+
+i.markdown {
+    background-image: url(../src/components/Editor/images/icons/markdown.svg);
+}
+
+i.outdent {
+    background-image: url(../src/components/Editor/images/icons/outdent.svg);
+}
+
+i.undo {
+    background-image: url(../src/components/Editor/images/icons/arrow-counterclockwise.svg);
+}
+
+i.redo {
+    background-image: url(../src/components/Editor/images/icons/arrow-clockwise.svg);
+}
+
+i.sticky {
+    background-image: url(../src/components/Editor/images/icons/sticky.svg);
+}
+
+i.mic {
+    background-image: url(../src/components/Editor/images/icons/mic.svg);
+}
+
+i.import {
+    background-image: url(../src/components/Editor/images/icons/upload.svg);
+}
+
+i.export {
+    background-image: url(../src/components/Editor/images/icons/download.svg);
+}
+
+i.diagram-2 {
+    background-image: url(../src/components/Editor/images/icons/diagram-2.svg);
+}
+
+i.user {
+    background-image: url(../src/components/Editor/images/icons/user.svg);
+}
+
+i.equation {
+    background-image: url(../src/components/Editor/images/icons/plus-slash-minus.svg);
+}
+
+i.gif {
+    background-image: url(../src/components/Editor/images/icons/filetype-gif.svg);
+}
+
+i.copy {
+    background-image: url(../src/components/Editor/images/icons/copy.svg);
+}
+
+i.success {
+    background-image: url(../src/components/Editor/images/icons/success.svg);
+}
+
+i.prettier {
+    background-image: url(../src/components/Editor/images/icons/prettier.svg);
+}
+
+i.prettier-error {
+    background-image: url(../src/components/Editor/images/icons/prettier-error.svg);
+}
+
+i.page-break,
+.icon.page-break {
+    background-image: url(../src/components/Editor/images/icons/scissors.svg);
+}
+
+.dropdown {
+    z-index: 100;
+    display: block;
+    position: fixed;
+    box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    min-height: 40px;
+    background-color: #fff;
+}
+
+.dropdown .item {
+    margin: 0 8px 0 8px;
+    padding: 8px;
+    color: #050505;
+    cursor: pointer;
+    line-height: 16px;
+    font-size: 15px;
+    display: flex;
+    align-content: center;
+    flex-direction: row;
+    flex-shrink: 0;
+    justify-content: space-between;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 0;
+    max-width: 250px;
+    min-width: 100px;
+}
+
+.dropdown .item.fontsize-item,
+.dropdown .item.fontsize-item .text {
+    min-width: unset;
+}
+
+.dropdown .item .active {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+}
+
+.dropdown .item:first-child {
+    margin-top: 8px;
+}
+
+.dropdown .item:last-child {
+    margin-bottom: 8px;
+}
+
+.dropdown .item:hover {
+    background-color: #eee;
+}
+
+.dropdown .item .text {
+    display: flex;
+    line-height: 20px;
+    flex-grow: 1;
+    min-width: 150px;
+}
+
+.dropdown .item .icon {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    user-select: none;
+    margin-right: 12px;
+    line-height: 16px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.dropdown .divider {
+    width: auto;
+    background-color: #eee;
+    margin: 4px 8px;
+    height: 1px;
+}
+
+@media screen and (max-width: 1100px) {
+    .dropdown-button-text {
+        display: none !important;
+    }
+
+    .font-size .dropdown-button-text {
+        display: flex !important;
+    }
+
+    .code-language .dropdown-button-text {
+        display: flex !important;
+    }
+}
+
+button.item.dropdown-item-active {
+    background-color: rgba(223, 232, 250, 0.3);
+}
+
+button.item.dropdown-item-active i {
+    opacity: 1;
+}
