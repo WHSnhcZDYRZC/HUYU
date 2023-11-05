@@ -13,7 +13,7 @@ const Animation = memo((props: AnimationPropsInf) => {
 
     useEffect(() => {
         animation(animationRef.current, animationName)
-    })
+    }, [])
 
     return (
         <div ref={animationRef} className={className}>

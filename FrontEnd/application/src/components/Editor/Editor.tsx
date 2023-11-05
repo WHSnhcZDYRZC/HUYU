@@ -74,7 +74,7 @@ import TreeViewPlugin from './plugins/TreeViewPlugin';
 import TwitterPlugin from './plugins/TwitterPlugin';
 import YouTubePlugin from './plugins/YouTubePlugin';
 import styled from './Editor.less'
-import AutoSavePlugin from './plugins/AutoSavePlugin';
+import InitPlugin from './plugins/InitPlugin';
 
 export const CAN_USE_DOM: boolean =
     typeof window !== 'undefined' &&
@@ -167,8 +167,8 @@ function prepopulatedRichText() {
 const RichTextDom = () => {
     return (
         <div className={styled['rich-text-dom']}>
-            <div>新页面</div>
-            <p>回车开始编辑</p>
+            {/* <div>新页面</div>
+            <p>回车开始编辑</p> */}
         </div>
     )
 }
@@ -277,7 +277,7 @@ export default function Editor(): JSX.Element {
                                 <KeywordsPlugin />
                                 <SpeechToTextPlugin />
 
-                                <AutoSavePlugin />
+                                <InitPlugin />
                                 {/* <AutoLinkPlugin /> */}
 
                                 <>

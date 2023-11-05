@@ -1,13 +1,12 @@
 import { DownOutlined, EllipsisOutlined, FileAddOutlined, FileWordOutlined, HomeOutlined, RightOutlined, SettingOutlined, UpOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Menu } from 'antd';
 import styled from './Menu.less';
 import router from '@/config/router';
 import { history } from 'umi';
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import useMenuStore, { MenuStateInf } from '@/store/menuStore';
+import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
+import useMenuStore from '@/store/menuStore';
 import Animation from '@/components/Animation/Animation';
 import { getUuid } from '@/utils';
+import Tools from '../Tools/Tools';
 
 interface MenuItemInf {
     children?: MenuItemInf[],
@@ -95,9 +94,21 @@ const MenuItems: React.FC = memo(() => {
 
         clearRefClassName();
         let activePath = path.split("/")
+        let result;
         if (activePath.length > 3) {
-            activePath = activePath.slice(0, 3).join("/");
-            menuRefs.current[activePath].dom.classList.add("childActive")
+            ; (() => {
+                result = [];
+                result.push(`/${activePath[1]}/${activePath[2]}`);
+                for (let i = 4; i < activePath.length; i++) {
+                    result.push(`${result[result.length - 1]}/${activePath[i - 1]}`);
+                }
+            })();
+
+            console.log("result", result);
+
+            result.forEach((activePath) => {
+                menuRefs.current[activePath].dom.classList.add("childActive")
+            })
         }
 
         if (_activeRouter) {
@@ -123,23 +134,28 @@ const MenuItems: React.FC = memo(() => {
 
     const menuRefs = useRef<any>({});
 
-    const addPageRouterHandler = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, v: MenuItemInf) => {
+    const addPageRouterHandler = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, v?: MenuItemInf) => {
         e.stopPropagation();
 
         const uuid = getUuid()
+
+        const _path = v ? v.path + "/" : "/application/"
 
         const dataItem = {
             id: uuid,
             key: uuid,
             label: "新页面",
-            path: v.path + "/" + uuid
+            path: _path + uuid
         }
 
-        v.children = v.children?.length ? [...v.children, dataItem] : [dataItem];
-        v.isOpen = true;
+        if (v) {
+            v.children = v.children?.length ? [...v.children, dataItem] : [dataItem];
+            v.isOpen = true;
+        } else {
+            _pageRouters.push(dataItem)
+        }
 
         _setPageRouters(JSON.parse(JSON.stringify(_pageRouters)))
-
         history.push(dataItem.path);
     }
 
@@ -184,9 +200,6 @@ const MenuItems: React.FC = memo(() => {
                                     <FileAddOutlined onClick={(e) => addPageRouterHandler(e, v)} />
                                 </span> : <></>
                         }
-
-
-
                     </div>
 
                     {
@@ -217,6 +230,7 @@ const MenuItems: React.FC = memo(() => {
 
     return (
         <>
+            <Tools addPageRouterHandler={addPageRouterHandler} />
             <div className='system-router router-flex'>
                 {systemMenu}
             </div>
@@ -230,8 +244,6 @@ const MenuItems: React.FC = memo(() => {
 
 export default () => {
     const [userName, setUserName] = useState("HuYu")
-    const [menuKey, setMenuKey] = useState(history.location.pathname)
-
     const collapsed = useMenuStore((state) => state.collapsed);
 
     const nameBox = useMemo(() => <div className='first-name'>{userName[0]}</div>, [userName])
@@ -241,7 +253,8 @@ export default () => {
             <div id='rootMenu' className={`${styled.menu} ${!collapsed ? "width15" : "width0"}`}>
 
                 <Animation
-                    className='user-box' animationName='animate__bounceIn'
+                    className='user-box'
+                    animationName='animate__bounceIn'
                 >
                     <>
                         {nameBox}
