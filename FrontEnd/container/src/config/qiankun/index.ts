@@ -14,4 +14,9 @@ export const qiankun = [
         entry: '//localhost:5183',
         activeRule: '/system',
     },
+    {
+        name: 'HuYu-sso',
+        entry: '//localhost:5184',
+        activeRule: '/sso',
+    },
 ];

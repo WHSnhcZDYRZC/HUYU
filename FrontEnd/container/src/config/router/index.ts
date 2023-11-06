@@ -24,4 +24,12 @@ export default [
         microApp: 'application',
         isHidden: true,
     },
+    {
+        name: '单点登录',
+        originalPath: "/sso/",
+        path: '/sso/*',
+        microApp: 'sso',
+        isHidden: true,
+        layoutHidden: true
+    },
 ];

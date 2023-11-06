@@ -20,5 +20,11 @@ export const qiankun = {
             activeRule: '/system',
             props: {},
         },
+        {
+            name: 'sso',
+            entry: '//localhost:5184',
+            activeRule: '/sso',
+            props: {},
+        },
     ]
 }

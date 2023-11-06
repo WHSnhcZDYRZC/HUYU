@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="huyu-note-utils" />
+        <module name="huyu-note-system" />
+        <module name="huyu-note-model" />
+        <module name="huyu-note-application" />
+        <module name="huyu-note-personal" />
+        <module name="huyu-note-gateway" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="application" target="8" />
+      <module name="personal" target="8" />
+      <module name="system" target="8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="huyu-note-application" options="-parameters" />
+      <module name="huyu-note-gateway" options="-parameters" />
+      <module name="huyu-note-model" options="-parameters" />
+      <module name="huyu-note-personal" options="-parameters" />
+      <module name="huyu-note-system" options="-parameters" />
+      <module name="huyu-note-utils" options="-parameters" />
+    </option>
+  </component>
+</project>
