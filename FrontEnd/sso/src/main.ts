@@ -6,6 +6,8 @@ import { renderWithQiankun, qiankunWindow } from 'vite-plugin-qiankun/dist/helpe
 import 'ant-design-vue/dist/reset.css';
 import Antd from 'ant-design-vue';
 
+import { Utils } from '@/utils'
+
 let app: any;
 if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
     createApp(App)
@@ -16,6 +18,7 @@ if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
     renderWithQiankun({
         // 子应用挂载
         mount(props: any) {
+            Utils.initUtils(props)
             app = createApp(App);
             app
                 .use(router)

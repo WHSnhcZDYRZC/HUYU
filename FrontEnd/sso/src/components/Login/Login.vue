@@ -49,6 +49,9 @@
 import { CSSProperties, reactive, ref } from 'vue';
 import LOGO from '@/assets/icon/icon.svg';
 import { message } from 'ant-design-vue';
+import { loginApi } from '@/api/user';
+import HistoryStorage from '@/utils/HistoryStorage';
+import { Utils } from '@/utils';
 
 const contentStyle: CSSProperties = {
   textAlign: 'center',
@@ -76,8 +79,14 @@ const formState = reactive<FormState>({
   remember: false,
   code: '',
 });
-const onFinish = (values: any) => {
-  console.log('Success:', values);
+const onFinish = () => {
+  verifyHandler(async () => {
+    const { code, data } = await loginApi(formState);
+    if (code === 200) {
+      HistoryStorage.setItem('token', data);
+      Utils.getUtils().changeRouter('/application');
+    }
+  });
 };
 
 const onFinishFailed = (errorInfo: any) => {
@@ -89,12 +98,15 @@ const agreementInfoClick = (e: MouseEvent) => {
   e.preventDefault();
 };
 
-const next = () => {
+const verifyHandler = (fn: () => void) => {
   form?.value.validate().then(() => {
     if (!formState.remember) return message.warning('请勾选《用户协议&隐私协议》');
     isNext.value = true;
+    fn();
   });
 };
+
+const next = () => verifyHandler(() => (isNext.value = true));
 
 const getCodeHandler = () => {};
 
@@ -147,8 +159,7 @@ const changeCodeHandler = () => {
     color: #fff;
 
     & + .code {
-      text-align: right;
-      display: block;
+      float: right;
       color: #8e8e8e;
     }
 

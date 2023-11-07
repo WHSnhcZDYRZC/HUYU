@@ -15,6 +15,7 @@
         <module>huyu-note-personal</module>
         <module>huyu-note-model</module>
         <module>huyu-note-utils</module>
+        <module>huyu-note-common</module>
     </modules>
 
     <!-- 继承Spring boot工程 -->

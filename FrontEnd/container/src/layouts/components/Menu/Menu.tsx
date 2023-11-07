@@ -5,7 +5,7 @@ import { history } from 'umi';
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import useMenuStore from '@/store/menuStore';
 import Animation from '@/components/Animation/Animation';
-import { getUuid } from '@/utils';
+import { $, getUuid } from '@/utils';
 import Tools from '../Tools/Tools';
 
 interface MenuItemInf {
@@ -247,6 +247,28 @@ export default () => {
     const collapsed = useMenuStore((state) => state.collapsed);
 
     const nameBox = useMemo(() => <div className='first-name'>{userName[0]}</div>, [userName])
+
+    const initRootMenuEventHandler = () => {
+        if (collapsed) {
+            window.onmousemove = (e) => {
+                if (e.clientX < 5) {
+                    $("#rootMenu")?.classList.add("width15");
+                }
+            }
+
+            // $("#rootMenu").onmouseleave = () => {
+            //     $("#rootMenu")?.classList.remove("width15");
+            // }
+        } else {
+            // $("#rootMenu")?.onmouseleave = null
+            window.onmousemove = null
+            // $("#rootMenu")?.onmouseleave = null
+        }
+    }
+
+    useEffect(() => {
+        initRootMenuEventHandler()
+    }, [collapsed])
 
     return (
         <>

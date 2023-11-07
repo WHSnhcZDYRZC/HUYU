@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.huyu.model.common.pojos.BasePojo;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,14 +17,14 @@ import java.util.Date;
  */
 @Data
 @TableName("huyu_user")
-public class User implements Serializable {
+public class User extends BasePojo {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
      * 密码、通信等加密盐
      */
-    @TableField("salt")
+    @TableField(value = "salt", exist = false)
     private String salt;
 
     /**
@@ -35,7 +36,7 @@ public class User implements Serializable {
     /**
      * 密码,md5加密
      */
-    @TableField("password")
+    @TableField(value = "password")
     private String password;
 
     /**
@@ -72,10 +73,4 @@ public class User implements Serializable {
      */
     @TableField("flag")
     private Short flag;
-
-    /**
-     * 注册时间
-     */
-    @TableField("created_time")
-    private Date createdTime;
 }

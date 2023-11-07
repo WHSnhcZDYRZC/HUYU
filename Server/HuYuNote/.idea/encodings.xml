@@ -2,10 +2,12 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/huyu-note-application/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/huyu-note-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/huyu-note-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/huyu-note-model/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/huyu-note-personal/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/huyu-note-system/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/huyu-note-utils/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/huyu-note-utils/src/main/resources" charset="UTF-8" />
   </component>
 </project>

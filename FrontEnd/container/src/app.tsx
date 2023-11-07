@@ -1,4 +1,5 @@
 import 'animate.css';
+import actions from '@/communication'
 
 export const qiankun = {
     apps: [
@@ -28,3 +29,5 @@ export const qiankun = {
         },
     ]
 }
+
+actions.install(qiankun);

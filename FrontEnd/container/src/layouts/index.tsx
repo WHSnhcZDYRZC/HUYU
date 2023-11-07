@@ -4,34 +4,59 @@ import Menu from './components/Menu/Menu';
 import { Button } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import useMenuStore from '@/store/menuStore';
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import HistoryStorage from '@/utils/HistoryStorage';
+import { getUserInfo } from "@/api/user";
+import request from "@/api";
 
 // 白名单
 const WhiteList = ['/sso/']
 
-export default () => {
+export default memo(() => {
   const breadcrumb = useMenuStore((state) => state.breadcrumb)
   const setCollapsed = useMenuStore((state) => state.setCollapsed)
   const collapsed = useMenuStore((state) => state.collapsed)
   const _router = useRouteProps();
 
-  const layout = useMemo((): any => {
-    // HistoryStorage.setItem("token", 123)
-    HistoryStorage.setItem("token", '')
+  const goLogin = () => {
+    HistoryStorage.clear();
+    history.push("/sso/login");
+  }
 
-    const isWhiteList = WhiteList.includes(_router.originalPath);
-    const token = HistoryStorage.getItem("token")
+  const getHasPermission = async () => {
+    try {
+      // 没有 token
+      const token = HistoryStorage.getItem("token")
+      if (!token) return goLogin();
 
-    if (isWhiteList && !token) return <Outlet />;
+      // 鉴权
+      const { code } = await getUserInfo()
+      const permission = code === 200;
 
-    // 未登录
-    if (!token) {
-      return history.push("/sso/")
-    } else if (token && isWhiteList) {
-      return history.push("/")
+      // 是否进入白名单
+      const isWhiteList = WhiteList.includes(_router.originalPath);
+
+
+      if (permission) {
+        // 有权限
+        if (isWhiteList) {
+          history.push("/");
+        }
+
+      } else {
+        // 无权限
+        return goLogin();
+      }
+    } catch (error) {
+      return goLogin()
     }
+  }
 
+  useEffect(() => {
+    getHasPermission();
+  }, [])
+
+  const layout = useMemo((): any => {
     return _router.layoutHidden ? <Outlet /> :
       <div className={styles.layout}>
         <Menu />
@@ -52,4 +77,4 @@ export default () => {
   return (
     layout
   );
-}
+})

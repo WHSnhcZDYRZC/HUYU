@@ -1,0 +1,72 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.layout {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+.layout :global .width0 {
+  width: 0%;
+  position: absolute;
+  top: 0;
+  z-index: 99999;
+}
+.layout :global .width15 {
+  width: 15%;
+}
+.layout :global .width85 {
+  width: 85%;
+}
+.layout :global .width99 {
+  width: 99.9%;
+}
+.layout :global .childShow {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.layout :global .childHidden {
+  display: none;
+}
+.layout :global .childActive {
+  color: #ca5356 !important;
+}
+.layout :global .overflowEllipsis {
+  white-space: nowrap;
+  /* 不换行 */
+  overflow: hidden;
+  /* 隐藏溢出内容 */
+  text-overflow: ellipsis;
+  /* 使用省略号来表示溢出 */
+}
+.layout :global .main {
+  box-sizing: border-box;
+  float: right;
+  height: 100%;
+}
+.layout :global .main .main-nav {
+  margin: 10px 10px 0;
+  display: flex;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.layout :global .main .main-nav p {
+  font-size: 16px;
+  margin-left: 10px;
+  line-height: 32px;
+  color: #acacac;
+}
+.layout :global .main .main-con {
+  height: calc(100% - 43px);
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 30px;
+}

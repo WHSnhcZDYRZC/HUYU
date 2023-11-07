@@ -9,10 +9,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="huyu-note-utils" />
         <module name="huyu-note-system" />
-        <module name="huyu-note-model" />
         <module name="huyu-note-application" />
-        <module name="huyu-note-personal" />
+        <module name="huyu-note-common" />
         <module name="huyu-note-gateway" />
+        <module name="huyu-note-model" />
+        <module name="huyu-note-personal" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -23,7 +24,9 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="HuYuNote" options="" />
       <module name="huyu-note-application" options="-parameters" />
+      <module name="huyu-note-common" options="-parameters" />
       <module name="huyu-note-gateway" options="-parameters" />
       <module name="huyu-note-model" options="-parameters" />
       <module name="huyu-note-personal" options="-parameters" />
