@@ -1,6 +1,8 @@
+import { Utils } from "@/utils";
+
 export const qiankun = {
     async mount(props: any) {
-        console.log(props)
+        Utils.initUtils(props)
     },
     async bootstrap() {
         console.log('umi app bootstraped');

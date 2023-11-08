@@ -1,3 +1,5 @@
+import useMenuStore, { MenuItemInf, MenuStateInf } from '@/store/menuStore';
+import { findObjectByPath } from '@/utils';
 import { initGlobalState } from 'qiankun';
 import { history } from 'umi'
 
@@ -5,8 +7,36 @@ import { history } from 'umi'
 let state = {
   // 容器名称
   sso: {
-    changeRouter: (path) => history.push(path)
+    changeRouter: (path: string) => history.push(path)
   },
+
+  application: {
+    setBreadcrumb: (titleStr: string = "HuYu 笔记") => {
+      const _pageRouters = useMenuStore.getState().pageRouters
+      const activeRouter = findObjectByPath(_pageRouters, history.location.pathname)
+
+      document.title = titleStr;
+      activeRouter.label = titleStr;
+      useMenuStore.setState({ breadcrumb: titleStr })
+      useMenuStore.setState({ pageRouters: JSON.parse(JSON.stringify(_pageRouters)) })
+    },
+
+    getActiveRouter: () => useMenuStore.getState().activeRouter,
+    setActiveRouter: (activeRouter: MenuItemInf) => {
+      const _pageRouters = useMenuStore.getState().pageRouters
+      useMenuStore.setState({ activeRouter })
+
+      const router = findObjectByPath(_pageRouters, activeRouter.routerPath)
+      router.id = activeRouter.id;
+      router.key = activeRouter.id;
+      router.label = activeRouter.title;
+
+      console.log("_pageRouters", _pageRouters);
+      // console.log("router", router, activeRouter);
+
+      useMenuStore.setState({ pageRouters: JSON.parse(JSON.stringify(_pageRouters)) })
+    }
+  }
 };
 
 const actions: any = initGlobalState(state);

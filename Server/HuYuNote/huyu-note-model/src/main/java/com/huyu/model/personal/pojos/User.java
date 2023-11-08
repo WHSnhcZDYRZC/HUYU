@@ -19,7 +19,7 @@ import java.util.Date;
 @TableName("huyu_user")
 public class User extends BasePojo {
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private long id;
 
     /**
      * 密码、通信等加密盐

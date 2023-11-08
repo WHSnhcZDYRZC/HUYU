@@ -1,0 +1,12 @@
+server:
+  port: 53802
+spring:
+  application:
+    name: huyu-note-application
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.200.131:8848
+      config:
+        server-addr: 192.168.200.131:8848
+        file-extension: yml

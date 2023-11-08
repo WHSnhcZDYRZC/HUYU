@@ -56,7 +56,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         password = DigestUtils.md5DigestAsHex((password + "HuYu").getBytes(StandardCharsets.UTF_8));
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getPhone, phone).eq(User::getPassword, password));
 
-        if (user == null || user.getId() == null)
+        if (user == null)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_PASSWORD_ERROR));
 
         String token = AppJwtUtil.getToken(Long.valueOf(user.getId()));
@@ -67,7 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public ResponseEntity<ResponseResult> getUserInfo() {
         User user = ThreadLocalUtil.getUser();
-        if (user == null || user.getId() == null)
+        if (user == null)
             return ResponseEntity.status(AppHttpCodeEnum.TOKEN_EXPIRE.getCode()).body(ResponseResult.errorResult(AppHttpCodeEnum.TOKEN_EXPIRE));
 
         user = userMapper.selectById(user.getId());

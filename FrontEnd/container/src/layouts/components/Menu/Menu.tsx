@@ -3,57 +3,20 @@ import styled from './Menu.less';
 import router from '@/config/router';
 import { history } from 'umi';
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
-import useMenuStore from '@/store/menuStore';
+import useMenuStore, { MenuItemInf } from '@/store/menuStore';
 import Animation from '@/components/Animation/Animation';
-import { $, getUuid } from '@/utils';
+import { $, getUUID } from '@/utils';
 import Tools from '../Tools/Tools';
-
-interface MenuItemInf {
-    children?: MenuItemInf[],
-    label: string,
-    key: string | number,
-    path: string,
-    id: string | number,
-    icon?: any,
-    [key: string]: any
-}
-
-const pageRouters: MenuItemInf[] = [
-    {
-        label: "Java",
-        key: "Java1",
-        id: "1023",
-        path: "/application/1023"
-    },
-    {
-        label: "Js",
-        key: "Js1",
-        id: "1024",
-        path: "/application/1024",
-        isOpen: false,
-        children: [
-            {
-                label: "JavaScript 是什么",
-                key: "Js2",
-                id: "1025",
-                path: "/application/1024/1025"
-            },
-            {
-                label: "JavaScript 是什么2",
-                key: "Js3",
-                id: "1026",
-                path: "/application/1024/1026"
-            }
-        ]
-    }
-]
 
 // 临时代码
 const ActiveClassName = "active";
 
 const MenuItems: React.FC = memo(() => {
     const setBreadcrumb = useMenuStore((state: any) => state.setBreadcrumb)
-    const [_pageRouters, _setPageRouters] = useState<MenuItemInf[]>(pageRouters);
+    const breadcrumb = useMenuStore((state: any) => state.breadcrumb)
+    const pageRouters = useMenuStore((state: any) => state.pageRouters)
+    const setPageRouters = useMenuStore((state: any) => state.setPageRouters)
+    const setActiveRouter = useMenuStore((state: any) => state.setActiveRouter)
 
     const _router: MenuItemInf[] = router.filter(v => v.name)
         .map(({ name, path, originalPath, isHidden, icon }: any) => {
@@ -104,8 +67,6 @@ const MenuItems: React.FC = memo(() => {
                 }
             })();
 
-            console.log("result", result);
-
             result.forEach((activePath) => {
                 menuRefs.current[activePath].dom.classList.add("childActive")
             })
@@ -120,16 +81,8 @@ const MenuItems: React.FC = memo(() => {
 
     const checkedOpenIconHandler = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, v: MenuItemInf) => {
         e.stopPropagation();
-
-        _setPageRouters((old) => {
-            // const changeItem = old.find(o => o.path === v.path)
-
-            // console.log(e, v, changeItem);
-
-            // changeItem && (v.isOpen = !v.isOpen);
-            v.isOpen = !v.isOpen
-            return JSON.parse(JSON.stringify(old));
-        })
+        v.isOpen = !v.isOpen
+        setPageRouters(JSON.parse(JSON.stringify(pageRouters)));
     }
 
     const menuRefs = useRef<any>({});
@@ -137,13 +90,13 @@ const MenuItems: React.FC = memo(() => {
     const addPageRouterHandler = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, v?: MenuItemInf) => {
         e.stopPropagation();
 
-        const uuid = getUuid()
+        const uuid = getUUID()
 
         const _path = v ? v.path + "/" : "/application/"
 
         const dataItem = {
-            id: uuid,
-            key: uuid,
+            id: "",
+            key: "",
             label: "新页面",
             path: _path + uuid
         }
@@ -152,10 +105,11 @@ const MenuItems: React.FC = memo(() => {
             v.children = v.children?.length ? [...v.children, dataItem] : [dataItem];
             v.isOpen = true;
         } else {
-            _pageRouters.push(dataItem)
+            pageRouters.push(dataItem)
         }
 
-        _setPageRouters(JSON.parse(JSON.stringify(_pageRouters)))
+        setPageRouters(JSON.parse(JSON.stringify(pageRouters)))
+        setActiveRouter(dataItem);
         history.push(dataItem.path);
     }
 
@@ -217,8 +171,8 @@ const MenuItems: React.FC = memo(() => {
     }
 
     const userMenu = useMemo(() => {
-        return menuHandler(_pageRouters, true)
-    }, [_pageRouters])
+        return menuHandler(pageRouters, true)
+    }, [pageRouters])
 
     const systemMenu = useMemo(() => {
         return menuHandler(_router)
@@ -226,7 +180,7 @@ const MenuItems: React.FC = memo(() => {
 
     useEffect(() => {
         init();
-    }, [_pageRouters])
+    }, [pageRouters])
 
     return (
         <>
@@ -249,20 +203,23 @@ export default () => {
     const nameBox = useMemo(() => <div className='first-name'>{userName[0]}</div>, [userName])
 
     const initRootMenuEventHandler = () => {
+        const dom = $("#rootMenu");
+
+        if (!dom) return;
         if (collapsed) {
+
             window.onmousemove = (e) => {
                 if (e.clientX < 5) {
                     $("#rootMenu")?.classList.add("width15");
                 }
             }
 
-            // $("#rootMenu").onmouseleave = () => {
-            //     $("#rootMenu")?.classList.remove("width15");
-            // }
+            dom.onmouseleave = () => {
+                dom.classList.remove("width15");
+            }
         } else {
-            // $("#rootMenu")?.onmouseleave = null
             window.onmousemove = null
-            // $("#rootMenu")?.onmouseleave = null
+            dom.onmouseleave = null
         }
     }
 

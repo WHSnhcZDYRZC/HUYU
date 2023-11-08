@@ -30,14 +30,15 @@ export default memo(() => {
       if (!token) return goLogin();
 
       // 鉴权
-      const { code } = await getUserInfo()
+      const { code, data } = await getUserInfo()
       const permission = code === 200;
 
       // 是否进入白名单
       const isWhiteList = WhiteList.includes(_router.originalPath);
 
-
       if (permission) {
+        HistoryStorage.setSessionItem("userInfo", data);
+
         // 有权限
         if (isWhiteList) {
           history.push("/");
