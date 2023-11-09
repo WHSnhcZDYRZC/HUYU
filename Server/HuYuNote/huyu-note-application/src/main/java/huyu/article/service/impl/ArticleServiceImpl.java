@@ -1,5 +1,7 @@
 package huyu.article.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huy.thread.ThreadLocalUtil;
 import com.huyu.model.article.pojos.Article;
@@ -21,6 +23,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import java.sql.Wrapper;
+import java.util.List;
 
 @Service
 
@@ -58,5 +63,27 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
 
         return ResponseEntity.ok(ResponseResult.okResult(params));
+    }
+
+    @Override
+    public ResponseEntity<ResponseResult> getArticleMenu(User user) {
+        long userId = user.getId();
+        if (user == null) {
+            return ResponseEntity.status(AppHttpCodeEnum.PARAM_REQUIRE.getCode()).body(ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE));
+        }
+
+        List<Article> articleList = articleMapper.selectList(new LambdaQueryWrapper<Article>().eq(Article::getUserId, userId));
+        return ResponseEntity.ok(ResponseResult.okResult(articleList));
+    }
+
+    @Override
+    public ResponseEntity<ResponseResult> getArticleContent(Long id) {
+        if (id == null) {
+            return ResponseEntity.status(AppHttpCodeEnum.PARAM_REQUIRE.getCode()).body(ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE));
+        }
+
+        Query query = Query.query(Criteria.where("ArticleId").is(id));
+        ArticleContent articleContent = mongoTemplate.findOne(query, ArticleContent.class);
+        return ResponseEntity.ok(ResponseResult.okResult(articleContent));
     }
 }

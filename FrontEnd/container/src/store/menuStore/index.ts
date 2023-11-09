@@ -44,7 +44,7 @@ export interface MenuItemInf {
 // ]
 
 export interface MenuStateInf {
-    activeRouter: MenuItemInf | any
+    // activeRouter: MenuItemInf | any
     collapsed: boolean
     breadcrumb: string
     pageRouters: MenuItemInf[]
@@ -53,7 +53,7 @@ export interface MenuStateInf {
     setBreadcrumb: (str: string) => any
     setPageRouters: (arr: MenuItemInf[]) => any
     // setExpandPageRouterMap: (arr: MenuItemInf[]) => any
-    setActiveRouter: (obj: MenuItemInf) => any
+    // setActiveRouter: (obj: MenuItemInf) => any
 }
 
 const useStore = create<MenuStateInf>((set) => ({
@@ -69,11 +69,11 @@ const useStore = create<MenuStateInf>((set) => ({
     //     })
     // },
 
-    setActiveRouter: (activeRouter) => {
-        set({
-            activeRouter,
-        })
-    },
+    // setActiveRouter: (activeRouter) => {
+    //     set({
+    //         activeRouter,
+    //     })
+    // },
 
     setPageRouters: (pageRouters) => {
         set((state) => {

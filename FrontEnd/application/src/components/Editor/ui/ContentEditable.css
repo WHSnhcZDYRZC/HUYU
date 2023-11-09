@@ -7,6 +7,7 @@
  *
  */
 .ContentEditable__root {
+  height: 100% !important;
   border: 0;
   font-size: 15px;
   display: block;
@@ -14,9 +15,9 @@
   outline: 0;
   padding: 30px;
   min-height: 150px;
-  overflow-y: auto;
   box-sizing: border-box;
 }
+
 @media (max-width: 1025px) {
   .ContentEditable__root {
     padding-left: 8px;

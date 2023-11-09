@@ -1,63 +1,47 @@
 import { $getRoot, $getSelection, $createParagraphNode, $createTextNode } from 'lexical';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { CLEAR_HISTORY_COMMAND } from 'lexical';
 import { defaultData } from './InitData'
 import { Utils } from '@/utils';
 import activeStore from '@/store';
 
-const AutoSavePlugin = () => {
+const AutoSavePlugin = memo(() => {
     const setArticleContent = activeStore((state: any) => state.setArticleContent)
+    const articleContent = activeStore((state: any) => state.articleContent)
     const setArticleTitle = activeStore((state: any) => state.setArticleTitle)
 
     const [editor] = useLexicalComposerContext();
     const { setBreadcrumb } = Utils.getUtils()
 
     const title = useRef("");
-    // const content = useRef("");
-
-    // const isInit = useRef(true);
 
     const setDefaultDataHandler = () => {
-        // if (isInit.current) {
-        let data = {}
-        const _data = data.editorState ? data : defaultData()
-        const json = JSON.parse(_data);
+        let data = articleContent
+        if (!data) return;
+        const json = JSON.parse(data);
         const editorState = editor.parseEditorState(
             JSON.stringify(json.editorState),
         );
         editor.setEditorState(editorState);
         editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
-        // }
     }
 
     const synchronizationContentHandler = () => {
-        const stringifiedEditorState = JSON.stringify(editor.getEditorState().toJSON());
-        setArticleContent(stringifiedEditorState)
+        const data = {
+            editorState: {
+                ...editor.getEditorState().toJSON()
+            }
+        }
 
-        // console.log("stringifiedEditorState", stringifiedEditorState);
+        setArticleContent(JSON.stringify(data))
     }
 
     useEffect(() => {
-        // setTimeout(() => {
-        //     console.log("editor.getEditorState()", editor.getEditorState());
-
-        //     console.log("editor.getEditorState().toJSON()", editor.getEditorState().toJSON());
-
-        //     const stringifiedEditorState = JSON.stringify(editor.getEditorState().toJSON());
-
-        //     // JSON
-        //     console.log("stringifiedEditorState", stringifiedEditorState);
-
-        //     const newEditorState = editor.parseEditorState(stringifiedEditorState);
-
-        //     console.log("newEditorState ===>", newEditorState);
-
-        // }, 3000)
-
         editor.update(setDefaultDataHandler)
         editor.focus();
         editor.registerUpdateListener(({ editorState }) => {
+            synchronizationContentHandler()
             const { _nodeMap } = editorState;
             if (_nodeMap.size === 2) {
                 const res = _nodeMap.values()
@@ -85,8 +69,6 @@ const AutoSavePlugin = () => {
                 setArticleTitle(title.current);
             }
 
-            synchronizationContentHandler()
-
             // editorState.read(() => {
             // Just like editor.update(), .read() expects a closure where you can use
             // the $ prefixed helper functions.
@@ -95,6 +77,6 @@ const AutoSavePlugin = () => {
     }, [editor]);
 
     return null;
-}
+})
 
 export default AutoSavePlugin;

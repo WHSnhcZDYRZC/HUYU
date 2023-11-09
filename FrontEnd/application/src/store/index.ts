@@ -10,9 +10,15 @@ export interface articleInf {
 
 const articleStore = create<articleInf>((set) => ({
     articleTitle: document.title,
-    articleContent: defaultData(),
-    setArticleContent: (articleContent) => set({ articleContent }),
-    setArticleTitle: (articleTitle) => set({ articleTitle })
+    articleContent: "",
+    setArticleContent: (articleContent) => {
+        // console.log("articleContent 123", articleContent);
+
+        set(() => ({ articleContent }))
+    },
+    setArticleTitle: (articleTitle) => {
+        set({ articleTitle })
+    }
 }))
 
 export default articleStore;

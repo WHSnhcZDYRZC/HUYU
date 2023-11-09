@@ -10,10 +10,10 @@
         <h1>登录/注册 HuYu</h1>
         <a-form-item name="phone" :rules="[{ required: true, message: '请输入手机号！' }]">
           <a-input-group size="large" compact>
-            <a-select style="width: 15%" v-model:value="formState.region">
+            <a-select style="width: 30%" v-model:value="formState.region">
               <a-select-option value="86">+ 86</a-select-option>
             </a-select>
-            <a-input placeholder="请输入手机号" v-model:value="formState.phone" style="width: 85%" />
+            <a-input placeholder="请输入手机号" v-model:value="formState.phone" style="width: 70%" />
           </a-input-group>
         </a-form-item>
 
@@ -180,6 +180,12 @@ const changeCodeHandler = () => {
   .code-btn {
     margin-left: 2%;
     color: #8e8e8e;
+  }
+}
+
+@media (max-width: 800px) {
+  .huyu-form {
+    width: 90% !important;
   }
 }
 </style>

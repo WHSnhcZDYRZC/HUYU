@@ -203,3 +203,45 @@ export const findObjectByPath = (data: MenuItemInf[], path: string) => {
 
   return search(data, path);
 }
+
+export const transformData = (sourceData: any) => {
+  const transformedData: any = [];
+
+  function processNode(node: any, parentKey = "") {
+    const newNode = {
+      id: node.id,
+      key: node.id,
+      label: node.title,
+      path: node.routerPath,
+    };
+
+    const children = sourceData.filter(
+      (item) =>
+        item.routerPath.startsWith(node.routerPath) &&
+        item.routerPath !== node.routerPath + "/" &&
+        item.routerPath.split("/").length ===
+        node.routerPath.split("/").length + 1
+    );
+
+    if (children.length > 0) {
+      newNode.children = children.map((child) =>
+        processNode(child, node.id)
+      );
+      newNode.isOpen = true;
+    }
+
+    if (parentKey !== "") {
+      newNode.parentKey = parentKey;
+    }
+
+    return newNode;
+  }
+
+  sourceData.forEach((item: any) => {
+    if (item.routerPath.split("/").length === 3) {
+      transformedData.push(processNode(item));
+    }
+  });
+
+  return transformedData;
+}

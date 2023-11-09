@@ -5,8 +5,11 @@ import { history } from 'umi';
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import useMenuStore, { MenuItemInf } from '@/store/menuStore';
 import Animation from '@/components/Animation/Animation';
-import { $, getUUID } from '@/utils';
+import { $, getUUID, transformData } from '@/utils';
 import Tools from '../Tools/Tools';
+import HistoryStorage from '@/utils/HistoryStorage';
+import { getArticleMenu } from '@/api/active';
+import animation from '@/utils/animation';
 
 // 临时代码
 const ActiveClassName = "active";
@@ -16,7 +19,7 @@ const MenuItems: React.FC = memo(() => {
     const breadcrumb = useMenuStore((state: any) => state.breadcrumb)
     const pageRouters = useMenuStore((state: any) => state.pageRouters)
     const setPageRouters = useMenuStore((state: any) => state.setPageRouters)
-    const setActiveRouter = useMenuStore((state: any) => state.setActiveRouter)
+    // const setActiveRouter = useMenuStore((state: any) => state.setActiveRouter)
 
     const _router: MenuItemInf[] = router.filter(v => v.name)
         .map(({ name, path, originalPath, isHidden, icon }: any) => {
@@ -43,8 +46,25 @@ const MenuItems: React.FC = memo(() => {
         clearRefClassName();
         activeItem.classList.add(ActiveClassName);
         setBreadcrumb(routerItemData.label);
+        HistoryStorage.setSessionItem("ActiveRouter", routerItemData);
         history.push(routerItemData.path);
     }
+
+
+    const getArticleMenuHandler = async () => {
+        const { code, data } = await getArticleMenu({
+            id: HistoryStorage.getSessionItem("userInfo")?.id
+        })
+
+        if (code === 200) {
+            const _data = transformData(data);
+            setPageRouters(_data)
+        }
+    }
+
+    useEffect(() => {
+        getArticleMenuHandler();
+    }, [])
 
     const init = () => {
         const routerIdx = [...Object.keys(menuRefs.current)].find(v => menuRefs.current[v].path === history.location.pathname);
@@ -109,7 +129,8 @@ const MenuItems: React.FC = memo(() => {
         }
 
         setPageRouters(JSON.parse(JSON.stringify(pageRouters)))
-        setActiveRouter(dataItem);
+        // setActiveRouter(dataItem);
+        HistoryStorage.setSessionItem("ActiveRouter", dataItem);
         history.push(dataItem.path);
     }
 
@@ -207,15 +228,15 @@ export default () => {
 
         if (!dom) return;
         if (collapsed) {
-
             window.onmousemove = (e) => {
-                if (e.clientX < 5) {
-                    $("#rootMenu")?.classList.add("width15");
+                if (e.clientX < 30) {
+                    if ([...dom.classList].includes("miniMenuWidth")) return;
+                    dom?.classList.add("miniMenuWidth");
+                    animation(dom, "animate__backInLeft", 0.5)
+                } else if (e.clientX > 180) {
+                    if (!([...dom.classList].includes("miniMenuWidth"))) return;
+                    animation(dom, "animate__backOutLeft", 0.5, () => dom.classList.remove("miniMenuWidth"))
                 }
-            }
-
-            dom.onmouseleave = () => {
-                dom.classList.remove("width15");
             }
         } else {
             window.onmousemove = null

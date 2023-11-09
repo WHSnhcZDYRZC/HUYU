@@ -6,3 +6,7 @@ export const saveOrUpdate = (data: articleSaveParams) => Request({
     url: "/article/saveOrUpdate",
     data,
 })
+
+export const getArticleContent = (id: string) => Request({
+    url: "/article/getArticleContent/" + id,
+})

@@ -63,7 +63,9 @@ export default memo(() => {
         <Menu />
         <div id='rootMain' className={`main ${!collapsed ? 'width85' : 'width99'}`}>
           <div className='main-nav'>
-            <Button onClick={() => setCollapsed(!collapsed)} type="dashed" icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} />
+            {
+              window.innerWidth < 1150 ? "" : <Button onClick={() => setCollapsed(!collapsed)} type="dashed" icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} />
+            }
             <p>
               {breadcrumb}
             </p>

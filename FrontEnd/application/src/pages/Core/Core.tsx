@@ -4,9 +4,10 @@ import { SettingsContext, useSettings } from '@/components/Editor/context/Settin
 import { Utils } from '@/utils';
 import HistoryStorage from '@/utils/HistoryStorage';
 import { Skeleton } from 'antd';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import activeStore from '@/store';
-import { saveOrUpdate } from '@/api/active';
+import { getArticleContent, saveOrUpdate } from '@/api/active';
+import { defaultData } from '@/components/Editor/plugins/InitPlugin/InitData';
 
 export interface articleSaveParams {
     id: string
@@ -18,44 +19,81 @@ export interface articleSaveParams {
 }
 
 const Core: React.FC = () => {
-    const articleContent = activeStore((state: any) => state.articleContent)
-    const articleTitle = activeStore((state: any) => state.articleTitle)
-
-
-    const setActiveRouter = Utils.getUtils().setActiveRouter;
+    const { setActiveRouter } = Utils.getUtils()
+    const _articleContent = activeStore((state: any) => state.articleContent)
+    const setArticleContent = activeStore((state: any) => state.setArticleContent)
+    // const articleTitle = activeStore((state: any) => state.articleTitle)
+    let activeRouter = HistoryStorage.getSessionItem("ActiveRouter")
+    const user = HistoryStorage.getSessionItem("userInfo");
 
     const [loading, setLoading] = useState(true);
     useEffect(() => {
-        activeRouterHandler(1);
-        // setTimeout(() => setLoading(true), 1000)
+        initHandler();
 
         return () => {
-            activeRouterHandler(0)
+            activeRouterSaveHandler(0)
         }
     }, [])
 
-    const activeRouterHandler = async (num) => {
-        const activeRouter = Utils.getUtils().getActiveRouter()
+    const articleContent = useRef("");
+    useEffect(() => {
+        articleContent.current = _articleContent;
+    }, [_articleContent])
 
-        const user = HistoryStorage.getSessionItem("userInfo");
-
-        console.log("activeRouter", num, activeRouter);
-
+    const activeRouterSaveHandler = async (num: number) => {
         if (!activeRouter.path) return;
 
-        const params: articleSaveParams = {
-            ...activeRouter,
-            userId: user.id,
-            userName: user.username,
-            articleContent,
-            title: activeRouter.label,
-            routerPath: activeRouter.path
-        }
+        setLoading(true)
+        try {
+            const params: articleSaveParams = {
+                ...activeRouter,
+                userId: user.id,
+                userName: user.username,
+                articleContent: articleContent.current || defaultData(),
+                title: activeRouter.label,
+                routerPath: activeRouter.path
+            }
 
-        const { code, data } = await saveOrUpdate(params)
-        if (code === 200) {
-            data.title = articleTitle ? articleTitle : data.title;
-            setActiveRouter(data);
+            const { code, data } = await saveOrUpdate(params)
+            if (code === 200) {
+                activeRouter = {
+                    ...activeRouter,
+                    id: data.id,
+                    key: data.id
+                }
+                
+                if (!params.id) {
+                    HistoryStorage.setSessionItem("ActiveRouter", activeRouter);
+                }
+                if (num) {
+                    setArticleContent(data.articleContent)
+                }
+                setActiveRouter();
+            }
+        } finally {
+            setTimeout(() => setLoading(false), 500)
+        }
+    }
+
+    const getArticleContentHandler = async () => {
+        setLoading(true)
+
+        try {
+            const { code, data } = await getArticleContent(activeRouter.id)
+
+            if (code === 200) {
+                setArticleContent(data.articleContent)
+            }
+        } finally {
+            setTimeout(() => setLoading(false), 500)
+        }
+    }
+
+    const initHandler = () => {
+        if (activeRouter.id) {
+            getArticleContentHandler();
+        } else {
+            activeRouterSaveHandler(1);
         }
     }
 
@@ -63,13 +101,13 @@ const Core: React.FC = () => {
         <div className={styled.Core}>
             {
                 loading ?
+                    <Skeleton active={true} />
+                    :
                     // {/* <SettingsContext> */ }
                     < div className="editor-shell">
                         <Editor />
                     </div>
-                    // {/* </SettingsContext> */ }
-                    :
-                    <Skeleton active={true} />
+                // {/* </SettingsContext> */ }
             }
         </div >
 

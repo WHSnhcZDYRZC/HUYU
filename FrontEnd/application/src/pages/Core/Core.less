@@ -27,11 +27,13 @@
         }
 
         .editor-shell .editor-container {
+            height: calc(100vh - 100px) !important;
             background: #fff;
             position: relative;
             display: block;
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
+            overflow-y: auto;
         }
 
         .editor-shell .editor-container.tree-view {
@@ -44,6 +46,9 @@
         }
 
         .editor-scroller {
+            height: 100% !important;
+            // height: calc(100vh - 187px) !important;
+            box-sizing: border-box;
             padding: 50px;
             min-height: 150px;
             border: 0;

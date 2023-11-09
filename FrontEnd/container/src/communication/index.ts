@@ -1,5 +1,6 @@
 import useMenuStore, { MenuItemInf, MenuStateInf } from '@/store/menuStore';
 import { findObjectByPath } from '@/utils';
+import HistoryStorage from '@/utils/HistoryStorage';
 import { initGlobalState } from 'qiankun';
 import { history } from 'umi'
 
@@ -19,21 +20,18 @@ let state = {
       activeRouter.label = titleStr;
       useMenuStore.setState({ breadcrumb: titleStr })
       useMenuStore.setState({ pageRouters: JSON.parse(JSON.stringify(_pageRouters)) })
+
+      const ss = HistoryStorage.getSessionItem("ActiveRouter")
+      HistoryStorage.setSessionItem("ActiveRouter", { ...ss, label: titleStr })
     },
 
-    getActiveRouter: () => useMenuStore.getState().activeRouter,
-    setActiveRouter: (activeRouter: MenuItemInf) => {
+    // getActiveRouter: () => useMenuStore.getState().activeRouter,
+    setActiveRouter: () => {
+      const activeRouter = HistoryStorage.getSessionItem("ActiveRouter")
       const _pageRouters = useMenuStore.getState().pageRouters
-      useMenuStore.setState({ activeRouter })
-
-      const router = findObjectByPath(_pageRouters, activeRouter.routerPath)
+      const router = findObjectByPath(_pageRouters, activeRouter.path)
       router.id = activeRouter.id;
       router.key = activeRouter.id;
-      router.label = activeRouter.title;
-
-      console.log("_pageRouters", _pageRouters);
-      // console.log("router", router, activeRouter);
-
       useMenuStore.setState({ pageRouters: JSON.parse(JSON.stringify(_pageRouters)) })
     }
   }
