@@ -1,11 +1,15 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import { renderWithQiankun, qiankunWindow } from 'vite-plugin-qiankun/dist/helper';
+import Antd from 'ant-design-vue';
+
+import './main.less'
 
 let app: any;
 if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
     createApp(App)
         // .use(router)
+        .use(Antd)
         .mount('#app');
 } else {
     renderWithQiankun({
@@ -13,6 +17,7 @@ if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
         mount(props: any) {
             app = createApp(App);
             app
+                .use(Antd)
                 // .use(router)
                 .mount(props.container.querySelector('#app'));
         },

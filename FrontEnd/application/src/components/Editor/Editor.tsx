@@ -265,7 +265,7 @@ export default function Editor(): JSX.Element {
                                 ${!isRichText ? 'plain-text' : ''
                                     }`}
                             >
-
+                                <DragDropPaste />
                                 {/* / 选择器 */}
                                 <ComponentPickerPlugin />
                                 <EmojiPickerPlugin />

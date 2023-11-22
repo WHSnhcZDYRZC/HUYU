@@ -1,0 +1,2 @@
+redisson:
+  address: "redis://192.168.200.131:6379"

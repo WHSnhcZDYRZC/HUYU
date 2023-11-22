@@ -1,27 +1,31 @@
 import { Link, Outlet, history, useRouteData, useRouteProps, useRoutes } from 'umi';
 import styles from './index.less';
 import Menu from './components/Menu/Menu';
-import { Button } from 'antd';
+import { Button, ConfigProvider } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import useMenuStore from '@/store/menuStore';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import HistoryStorage from '@/utils/HistoryStorage';
 import { getUserInfo } from "@/api/user";
-import request from "@/api";
+import FullLoading from './components/FullLoading/FullLoading';
+import useFullLoading from '@/store/fullLoadingStore';
 
 // 白名单
-const WhiteList = ['/sso/']
+const WhiteList = ['/sso/', '/sso/login']
+
+const goLogin = () => {
+  HistoryStorage.clear();
+  history.push("/sso/login");
+}
 
 export default memo(() => {
   const breadcrumb = useMenuStore((state) => state.breadcrumb)
   const setCollapsed = useMenuStore((state) => state.setCollapsed)
   const collapsed = useMenuStore((state) => state.collapsed)
+  const isFullLoadingShow = useFullLoading((state: any) => state.isFullLoadingShow)
+  const setFullLoadingShow = useFullLoading((state: any) => state.setFullLoadingShow)
+  const setUserInfo = useFullLoading((state: any) => state.setUserInfo)
   const _router = useRouteProps();
-
-  const goLogin = () => {
-    HistoryStorage.clear();
-    history.push("/sso/login");
-  }
 
   const getHasPermission = async () => {
     try {
@@ -30,13 +34,20 @@ export default memo(() => {
       if (!token) return goLogin();
 
       // 鉴权
-      const { code, data } = await getUserInfo()
-      const permission = code === 200;
+      let code, data = HistoryStorage.getSessionItem("userInfo");
+
+      let permission = true;
+
+      if (!data?.id) {
+        ({ code, data } = await getUserInfo());
+        permission = code === 200;
+      }
 
       // 是否进入白名单
       const isWhiteList = WhiteList.includes(_router.originalPath);
 
       if (permission) {
+        setUserInfo(data);
         HistoryStorage.setSessionItem("userInfo", data);
 
         // 有权限
@@ -48,14 +59,19 @@ export default memo(() => {
         // 无权限
         return goLogin();
       }
+
     } catch (error) {
       return goLogin()
     }
   }
 
   useEffect(() => {
-    getHasPermission();
-  }, [])
+    getHasPermission().then(() => {
+      setTimeout(() =>
+        setFullLoadingShow(false)
+        , 1000)
+    })
+  }, [_router.path])
 
   const layout = useMemo((): any => {
     return _router.layoutHidden ? <Outlet /> :
@@ -78,6 +94,19 @@ export default memo(() => {
   }, [_router])
 
   return (
-    layout
+    <>
+      {
+        isFullLoadingShow ? <FullLoading /> : ""
+      }
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: '#cf5659',
+          },
+        }}
+      >
+        {layout}
+      </ConfigProvider>
+    </>
   );
 })

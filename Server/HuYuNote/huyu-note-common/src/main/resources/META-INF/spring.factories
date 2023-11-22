@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.huy.fileStarter.service.impl.MinIOFileStorageService, \
+  com.huy.redisson.config.MyRedissonConfig

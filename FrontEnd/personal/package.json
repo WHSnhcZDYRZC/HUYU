@@ -9,12 +9,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "ant-design-vue": "4.x",
+    "axios": "^1.6.0",
+    "dayjs": "^1.11.10",
+    "echarts": "^5.4.3",
+    "spark-md5": "^3.0.2",
     "vite-plugin-qiankun": "^1.0.15",
     "vue": "^3.3.4"
   },
   "devDependencies": {
     "@types/node": "^20.8.7",
     "@vitejs/plugin-vue": "^4.2.3",
+    "less": "^4.2.0",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vue-tsc": "^1.8.5"

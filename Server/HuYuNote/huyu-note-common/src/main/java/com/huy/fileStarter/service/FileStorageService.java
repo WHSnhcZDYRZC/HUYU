@@ -40,4 +40,5 @@ public interface FileStorageService {
      */
     public byte[]  downLoadFile(String pathUrl);
 
+    String updateFile(String originalFilename, InputStream inputStream, String contentType);
 }

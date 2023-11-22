@@ -117,13 +117,14 @@ const changeCodeHandler = () => {
 
 <style scoped lang="less">
 .container {
-  box-sizing: border-box;
+  // box-sizing: border-box;
   padding: 20px;
   position: relative;
   height: 100vh;
 
   h1 {
     font-weight: 700;
+    margin-bottom: 24px;
   }
   .logo {
     display: flex;

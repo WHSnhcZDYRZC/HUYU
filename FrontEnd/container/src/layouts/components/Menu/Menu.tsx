@@ -10,6 +10,7 @@ import Tools from '../Tools/Tools';
 import HistoryStorage from '@/utils/HistoryStorage';
 import { getArticleMenu } from '@/api/active';
 import animation from '@/utils/animation';
+import useFullLoading from '@/store/fullLoadingStore';
 
 // 临时代码
 const ActiveClassName = "active";
@@ -20,6 +21,7 @@ const MenuItems: React.FC = memo(() => {
     const pageRouters = useMenuStore((state: any) => state.pageRouters)
     const setPageRouters = useMenuStore((state: any) => state.setPageRouters)
     // const setActiveRouter = useMenuStore((state: any) => state.setActiveRouter)
+    const userInfo = useFullLoading((state: any) => state.userInfo)
 
     const _router: MenuItemInf[] = router.filter(v => v.name)
         .map(({ name, path, originalPath, isHidden, icon }: any) => {
@@ -27,7 +29,7 @@ const MenuItems: React.FC = memo(() => {
                 label: name,
                 key: name,
                 path: isHidden ? originalPath : path,
-                id: name,
+                id: "",
                 isHidden,
                 icon,
             }
@@ -52,6 +54,7 @@ const MenuItems: React.FC = memo(() => {
 
 
     const getArticleMenuHandler = async () => {
+        if (!(userInfo.id || HistoryStorage.getItem("userInfo")?.id)) return;
         const { code, data } = await getArticleMenu({
             id: HistoryStorage.getSessionItem("userInfo")?.id
         })
@@ -64,7 +67,7 @@ const MenuItems: React.FC = memo(() => {
 
     useEffect(() => {
         getArticleMenuHandler();
-    }, [])
+    }, [userInfo?.id])
 
     const init = () => {
         const routerIdx = [...Object.keys(menuRefs.current)].find(v => menuRefs.current[v].path === history.location.pathname);

@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router';
 import { renderWithQiankun, qiankunWindow } from 'vite-plugin-qiankun/dist/helper';
 
-import 'ant-design-vue/dist/reset.css';
 import Antd from 'ant-design-vue';
 
 import { Utils } from '@/utils'

@@ -14,5 +14,4 @@ public abstract class BasePojo implements Serializable {
     private Date createdTime;
     @TableField(fill = FieldFill.INSERT_UPDATE, value = "update_time")
     private Date updatedTime;
-
 }

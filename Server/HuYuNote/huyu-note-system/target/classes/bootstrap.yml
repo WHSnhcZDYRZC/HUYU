@@ -10,3 +10,10 @@ spring:
       config:
         server-addr: 192.168.200.131:8848
         file-extension: yml
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+file:
+  target: C:\Users\huy\Desktop\upload\
+  redisTarget: bigFileSlice

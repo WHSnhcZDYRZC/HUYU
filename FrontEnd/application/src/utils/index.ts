@@ -143,6 +143,6 @@ export class Utils {
   }
 
   static getUtils() {
-    return this.#utils.getActions()[this.#utils.name];
+    return this.#utils.getActions()["application"];
   }
 }

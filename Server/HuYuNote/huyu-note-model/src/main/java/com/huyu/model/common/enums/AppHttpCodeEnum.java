@@ -34,7 +34,13 @@ public enum AppHttpCodeEnum {
     NEED_ADMIND(3001, "需要管理员权限"),
 
     // 自媒体文章错误
-    MATERIASL_REFERENCE_FAIL(3501, "素材引用失效");
+    MATERIASL_REFERENCE_FAIL(3501, "素材引用失效"),
+
+    // 文件端
+    SUCCESS_FILE(200, "文件上传成功"),
+    WARN_FILE(200, "文件不存在"),
+    SUCCESS_FILE_EXIST(200, "文件已存在"),
+    SUCCESS_FilE_UPLOADED(200, "文件上传中");
 
     int code;
     String message;

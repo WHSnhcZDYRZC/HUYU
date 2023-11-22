@@ -35,7 +35,7 @@ public class MinIOFileStorageService implements FileStorageService {
 
     /**
      * @param dirPath
-     * @param filename yyyy/mm/dd/file.jpg
+     * @param filename yyyy/mm/dd/File.jpg
      * @return
      */
     public String builderFilePath(String dirPath, String filename) {
@@ -74,7 +74,7 @@ public class MinIOFileStorageService implements FileStorageService {
             urlPath.append(filePath);
             return urlPath.toString();
         } catch (Exception ex) {
-            log.error("minio put file error.", ex);
+            log.error("minio put File error.", ex);
             throw new RuntimeException("上传文件失败");
         }
     }
@@ -103,7 +103,7 @@ public class MinIOFileStorageService implements FileStorageService {
             urlPath.append(filePath);
             return urlPath.toString();
         } catch (Exception ex) {
-            log.error("minio put file error.", ex);
+            log.error("minio put File error.", ex);
             ex.printStackTrace();
             throw new RuntimeException("上传文件失败");
         }
@@ -125,7 +125,7 @@ public class MinIOFileStorageService implements FileStorageService {
         try {
             minioClient.removeObject(removeObjectArgs);
         } catch (Exception e) {
-            log.error("minio remove file error.  pathUrl:{}", pathUrl);
+            log.error("minio remove File error.  pathUrl:{}", pathUrl);
             e.printStackTrace();
         }
     }
@@ -147,7 +147,7 @@ public class MinIOFileStorageService implements FileStorageService {
         try {
             inputStream = minioClient.getObject(GetObjectArgs.builder().bucket(minIOConfigProperties.getBucket()).object(filePath).build());
         } catch (Exception e) {
-            log.error("minio down file error.  pathUrl:{}", pathUrl);
+            log.error("minio down File error.  pathUrl:{}", pathUrl);
             e.printStackTrace();
         }
 
@@ -163,5 +163,27 @@ public class MinIOFileStorageService implements FileStorageService {
             byteArrayOutputStream.write(buff, 0, rc);
         }
         return byteArrayOutputStream.toByteArray();
+    }
+
+    @Override
+    public String updateFile(String originalFilename, InputStream inputStream, String contentType) {
+        String filePath = builderFilePath("", originalFilename);
+        try {
+            PutObjectArgs putObjectArgs = PutObjectArgs.builder()
+                    .object(filePath)
+                    .contentType(contentType)
+                    .bucket(minIOConfigProperties.getBucket()).stream(inputStream, inputStream.available(), -1)
+                    .build();
+            minioClient.putObject(putObjectArgs);
+            StringBuilder urlPath = new StringBuilder(minIOConfigProperties.getReadPath());
+            urlPath.append(separator + minIOConfigProperties.getBucket());
+            urlPath.append(separator);
+            urlPath.append(filePath);
+            return urlPath.toString();
+        } catch (Exception ex) {
+            log.error("minio put File error.", ex);
+            ex.printStackTrace();
+            throw new RuntimeException("上传文件失败");
+        }
     }
 }

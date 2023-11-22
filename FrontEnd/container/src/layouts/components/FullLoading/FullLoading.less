@@ -1,0 +1,30 @@
+.main {
+    position: absolute;
+    top: 0;
+    z-index: 999999;
+    width: 100vw;
+    height: 100vh;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    :global {
+        .container {
+            width: 200px;
+
+            .img-box {
+                width: 100%;
+                height: 100px;
+                margin-bottom: 10px;
+
+                img {
+                    margin-left: 50%;
+                    transform: translate(-50%);
+                    width: 100px;
+                    height: 100%;
+                }
+            }
+        }
+    }
+}

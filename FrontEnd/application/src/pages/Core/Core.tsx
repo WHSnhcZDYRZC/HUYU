@@ -20,6 +20,7 @@ export interface articleSaveParams {
 
 const Core: React.FC = () => {
     const { setActiveRouter } = Utils.getUtils()
+
     const _articleContent = activeStore((state: any) => state.articleContent)
     const setArticleContent = activeStore((state: any) => state.setArticleContent)
     // const articleTitle = activeStore((state: any) => state.articleTitle)

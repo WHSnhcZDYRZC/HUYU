@@ -60,6 +60,14 @@ public class ResponseResult<T> implements Serializable {
         return result;
     }
 
+    public static ResponseResult okFileResult(Object data) {
+        ResponseResult result = setAppHttpCodeEnum(AppHttpCodeEnum.SUCCESS_FILE, AppHttpCodeEnum.SUCCESS_FILE.getMessage());
+        if (data != null) {
+            result.setData(data);
+        }
+        return result;
+    }
+
     public static ResponseResult errorResult(AppHttpCodeEnum enums) {
         return setAppHttpCodeEnum(enums, enums.getMessage());
     }

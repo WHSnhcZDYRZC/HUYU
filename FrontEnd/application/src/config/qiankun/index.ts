@@ -2,6 +2,7 @@ import { Utils } from "@/utils";
 
 export const qiankun = {
     async mount(props: any) {
+        console.log("props", props);
         Utils.initUtils(props)
     },
     async bootstrap() {

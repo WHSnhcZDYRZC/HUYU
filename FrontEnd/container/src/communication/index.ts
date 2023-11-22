@@ -28,11 +28,14 @@ let state = {
     // getActiveRouter: () => useMenuStore.getState().activeRouter,
     setActiveRouter: () => {
       const activeRouter = HistoryStorage.getSessionItem("ActiveRouter")
+      if (!activeRouter.id) return;
+
       const _pageRouters = useMenuStore.getState().pageRouters
       const router = findObjectByPath(_pageRouters, activeRouter.path)
       router.id = activeRouter.id;
       router.key = activeRouter.id;
       useMenuStore.setState({ pageRouters: JSON.parse(JSON.stringify(_pageRouters)) })
+
     }
   }
 };
@@ -43,8 +46,6 @@ actions.onGlobalStateChange((_state: any, prev: any) => {
   // state: 变更后的状态; prev 变更前的状态
   // console.log('=======> 容器：', _state, prev);
   state = _state;
-
-  // console.log("state", state);
 });
 
 actions.setGlobalState(state);

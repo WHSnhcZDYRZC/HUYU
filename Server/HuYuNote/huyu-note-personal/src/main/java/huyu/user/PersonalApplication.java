@@ -13,8 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 // 集成 Mybatis-plus， 扫描 Mapper
 @MapperScan("com.huyu.user.mapper")
-public class UserApplication {
+public class PersonalApplication {
     public static void main(String[] args) {
-        SpringApplication.run(UserApplication.class, args);
+        SpringApplication.run(PersonalApplication.class, args);
     }
 }
