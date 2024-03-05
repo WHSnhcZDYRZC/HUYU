@@ -1,0 +1,26 @@
+server:
+  port: 8788
+  ssl:
+    key-store: classpath:huyu.jks
+    key-store-password: hujie123
+    key-password: hujie123
+    enabled: true
+  http2:
+    enabled: true
+spring:
+  application:
+    name: huyu-note-http2-demo
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.200.131:8848
+      config:
+        server-addr: 192.168.200.131:8848
+        file-extension: yml
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+file:
+  target: C:\Users\huy\Desktop\upload\
+  redisTarget: bigFileSlice

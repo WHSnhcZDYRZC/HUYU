@@ -16,6 +16,9 @@
         <module>huyu-note-model</module>
         <module>huyu-note-utils</module>
         <module>huyu-note-common</module>
+        <module>huyu-note-demo</module>
+        <module>huyu-note-http2-demo</module>
+        <module>huyu-note-http2-demo</module>
     </modules>
 
     <!-- 继承Spring boot工程 -->
@@ -84,27 +87,6 @@
     <dependencyManagement>
 
         <dependencies>
-            <!--内部依赖工程-->
-<!--            <dependency>-->
-<!--                <artifactId>heima-leadnews-feign-api</artifactId>-->
-<!--                <groupId>com.heima</groupId>-->
-<!--                <version>${project.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <artifactId>heima-leadnews-common</artifactId>-->
-<!--                <groupId>com.heima</groupId>-->
-<!--                <version>${project.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <artifactId>heima-leadnews-model</artifactId>-->
-<!--                <groupId>com.heima</groupId>-->
-<!--                <version>${project.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <artifactId>heima-leadnews-utils</artifactId>-->
-<!--                <groupId>com.heima</groupId>-->
-<!--                <version>${project.version}</version>-->
-<!--            </dependency>-->
             <!-- Spring boot 特殊处理包 -->
             <dependency>
                 <groupId>org.reflections</groupId>

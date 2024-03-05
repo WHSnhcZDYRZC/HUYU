@@ -134,4 +134,15 @@ public class SystemApplicationTest {
 
         return hexStringBuilder.toString();
     }
+
+    @Test
+    public void testStr() {
+        String str = "编程的本质是通过一系列指令和算法来指导计算机执行特定任务的过程。它涉及将问题分解成可执行的步骤，设计并实现解决方案，然后将其转化为计算机可以理解和执行的代码。编程的核心在于解决问题、实现功能和创造价值。它需要逻辑思维、创造力和持续的学习，同时还需要对计算机科学和编程语言等技术领域有深入的理解。在实践中，编程通常涉及调试、优化和不断改进代码，以确保其正确性、效率和可维护性。";
+
+        String[] strArr = str.split("");
+
+        for (String s : strArr) {
+            System.out.println(s);
+        }
+    }
 }

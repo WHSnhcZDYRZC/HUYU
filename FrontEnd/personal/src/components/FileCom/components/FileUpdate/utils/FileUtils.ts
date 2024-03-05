@@ -1,6 +1,6 @@
 import { beforeUpdateFile, shardingUpload } from '@/api/file';
 import '/spark-md5.min.js?url';
-import FileWork from '@/works/FileWork/FileWork.js?raw'
+import FileWork from '@/works/FileWork/FileWork.ts?raw'
 import { message } from 'ant-design-vue';
 import { ref } from 'vue';
 import BigDataUpdateMessage from '../class/BigDataUpdateMessage';
