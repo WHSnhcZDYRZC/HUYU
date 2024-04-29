@@ -46,4 +46,4 @@ const activeLabel = ref(data[0].label);
   padding: 20px 0;
 }
 </style>
-../RelationalChart/RelationalChart.vue
+

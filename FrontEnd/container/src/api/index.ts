@@ -7,8 +7,22 @@ const Request = axios.create({
     timeout: process.env.UMI_APP_TIME_OUT_PERIOD as any,
 })
 
+enum ErrorType {
+    UNAUTHORIZED = 401,
+}
+
 const errorHandler = (error: any) => {
     console.log("error", error);
+    error.response.status
+
+    switch (error.response.status) {
+        case ErrorType.UNAUTHORIZED:
+            HistoryStorage.clear()
+            location.reload();
+            break;
+        default:
+            break;
+    }
 
     const { response: { data } } = error
     message.error(data.message)

@@ -49,6 +49,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         params.setUserId(params.getUserId());
         params.setArticleStatus(1);
+        params.setEditTimes(params.getEditTimes() == null ? 1 : params.getEditTimes() + 1);
 
         if (params.getId() == null) {
             // add

@@ -41,6 +41,8 @@ const MenuItems: React.FC = memo(() => {
     };
 
     const menuItemClickHandler = (routerItemData: MenuItemInf) => {
+        console.log("routerItemData", routerItemData);
+        
         const activeItem = menuRefs.current[routerItemData.path].dom;
 
         const haveClassName = [...activeItem.classList].some((v: string) => v === ActiveClassName);

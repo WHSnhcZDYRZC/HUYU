@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.huyu.model.system.pojos.File;
 import com.huyu.model.system.vos.BigFileSlice;
 import com.huyu.model.system.vos.FileSimple;
+import com.huyu.model.system.vos.FileVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,5 +17,5 @@ public interface FileService extends IService<File> {
 
     ResponseEntity shardingUpload(MultipartFile fileStream, BigFileSlice fileSlice);
 
-    ResponseEntity getFileList();
+    ResponseEntity getFileList(String fileName, String createdTime, String endTime);
 }

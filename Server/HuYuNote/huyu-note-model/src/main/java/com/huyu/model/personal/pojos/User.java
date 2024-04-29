@@ -1,9 +1,6 @@
 package com.huyu.model.personal.pojos;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.huyu.model.common.pojos.BasePojo;
 import lombok.Data;
 
@@ -73,4 +70,8 @@ public class User extends BasePojo {
      */
     @TableField("flag")
     private Short flag;
+
+    @TableLogic
+    @TableField("isDelect")
+    private Short isDelect;
 }

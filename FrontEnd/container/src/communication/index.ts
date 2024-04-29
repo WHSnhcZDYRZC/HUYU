@@ -28,6 +28,7 @@ let state = {
     // getActiveRouter: () => useMenuStore.getState().activeRouter,
     setActiveRouter: () => {
       const activeRouter = HistoryStorage.getSessionItem("ActiveRouter")
+
       if (!activeRouter.id) return;
 
       const _pageRouters = useMenuStore.getState().pageRouters

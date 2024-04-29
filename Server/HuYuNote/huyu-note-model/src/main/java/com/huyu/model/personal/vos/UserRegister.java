@@ -7,4 +7,6 @@ import java.util.Date;
 @Data
 public class UserRegister extends UserLogin {
     private Date createdTime;
+    private Boolean status;
+    private Short flag;
 }

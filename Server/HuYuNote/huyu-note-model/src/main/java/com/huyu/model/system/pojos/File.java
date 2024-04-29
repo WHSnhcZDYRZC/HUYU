@@ -1,9 +1,6 @@
 package com.huyu.model.system.pojos;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.huyu.model.common.pojos.BasePojo;
 import lombok.Data;
 
@@ -24,10 +21,10 @@ public class File extends BasePojo {
     @TableField("hash")
     private String Hash;
 
-    @TableField("user_id")
+    @TableField(value = "user_id", fill = FieldFill.INSERT)
     private Integer userId;
 
-    @TableField("created_time")
+    @TableField(value = "created_time", fill = FieldFill.INSERT)
     private Date createdTime;
 
     @TableField("updated_time")

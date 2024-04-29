@@ -19,7 +19,8 @@ export const shardingUpload = (data: any, config: any) => Request({
     ...config
 })
 
-export const getFileList = () => Request({
+export const getFileList = (params: any) => Request({
     url: "/system/getFileList",
+    params
 })
 

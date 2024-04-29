@@ -2,6 +2,7 @@ package com.huyu.system.controller;
 
 import com.huyu.model.system.vos.BigFileSlice;
 import com.huyu.model.system.vos.FileSimple;
+import com.huyu.model.system.vos.FileVo;
 import com.huyu.system.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +60,11 @@ public class SystemController {
     }
 
     @GetMapping("/getFileList")
-    public ResponseEntity getFileList() {
-        return fileService.getFileList();
+    public ResponseEntity getFileList(
+            @RequestParam("fileName") String fileName,
+            @RequestParam("createdTime") String createdTime,
+            @RequestParam("endTime") String endTime
+    ) {
+        return fileService.getFileList(fileName, createdTime, endTime);
     }
 }

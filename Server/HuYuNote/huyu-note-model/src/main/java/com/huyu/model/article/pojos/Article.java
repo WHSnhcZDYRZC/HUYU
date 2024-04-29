@@ -54,4 +54,10 @@ public class Article extends BasePojo {
      */
     @TableField("article_status")
     private Integer articleStatus;
+
+    /**
+     * 文章编辑次数
+     */
+    @TableField("edit_times")
+    private Integer editTimes;
 }

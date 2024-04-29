@@ -6,6 +6,18 @@
 import * as echarts from 'echarts';
 import { onMounted } from 'vue';
 import graph from './data';
+import { getArticleMenu } from '@/api/active';
+import HistoryStorage from '@/utils/HistoryStorage';
+
+const getArticleMenuHandler = async () => {
+  const { code, data } = await getArticleMenu({
+    id: HistoryStorage.getSessionItem('userInfo')?.id,
+  });
+
+  console.log('data', data);
+};
+
+getArticleMenuHandler();
 
 onMounted(() => {
   var chartDom = document.getElementById('PersonalRelationalChart');

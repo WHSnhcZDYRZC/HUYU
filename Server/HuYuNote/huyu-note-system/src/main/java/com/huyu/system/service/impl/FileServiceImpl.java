@@ -1,5 +1,6 @@
 package com.huyu.system.service.impl;
 
+import com.alibaba.cloud.commons.lang.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huy.fileStarter.service.FileStorageService;
@@ -176,8 +177,17 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     }
 
     @Override
-    public ResponseEntity getFileList() {
-        List<File> files = fileMapper.selectList(new LambdaQueryWrapper<File>());
+    public ResponseEntity getFileList(String fileName, String createdTime, String endTime) {
+        System.out.println(fileName + createdTime + endTime);
+
+        LambdaQueryWrapper<File> lqw = new LambdaQueryWrapper();
+        lqw.like(fileName != null, File::getName, fileName);
+
+        if (StringUtils.isNotEmpty(createdTime)) {
+            lqw.ge(File::getCreatedTime, createdTime).le(File::getCreatedTime, endTime);
+        }
+
+        List<File> files = fileMapper.selectList(lqw);
         return ResponseEntity.ok(ResponseResult.okResult(files));
     }
 }

@@ -24,10 +24,10 @@ public class FileController {
         return ResponseEntity.ok(ResponseResult.okResult("Hello client!"));
     }
 
-    @GetMapping("/getFileList")
-    public ResponseEntity getFileList() {
-        return fileService.getFileList();
-    }
+//    @GetMapping("/getFileList")
+//    public ResponseEntity getFileList() {
+//        return fileService.getFileList();
+//    }
 
     @PostMapping("/beforeUpload")
     public ResponseEntity beforeUpload(@RequestBody FileSimple fileSimple) {
