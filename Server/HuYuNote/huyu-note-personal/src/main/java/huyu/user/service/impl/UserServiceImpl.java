@@ -131,6 +131,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public ResponseEntity<ResponseResult> setUserInfo(User user) {
+        User u = userMapper.selectById(user.getId());
+        user.setPassword(u.getPassword());
+
         userMapper.updateById(user);
         return ResponseEntity.ok(ResponseResult.okResult(AppHttpCodeEnum.SUCCESS));
     }

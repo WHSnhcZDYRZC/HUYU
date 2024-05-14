@@ -37,12 +37,12 @@ const MenuItems: React.FC = memo(() => {
 
     const clearRefClassName = () => {
         Object.keys(menuRefs.current).forEach(v =>
-            menuRefs.current[v].dom.classList.remove(ActiveClassName, "childActive"))
+            menuRefs.current[v].dom?.classList?.remove?.(ActiveClassName, "childActive"))
     };
 
     const menuItemClickHandler = (routerItemData: MenuItemInf) => {
         console.log("routerItemData", routerItemData);
-        
+
         const activeItem = menuRefs.current[routerItemData.path].dom;
 
         const haveClassName = [...activeItem.classList].some((v: string) => v === ActiveClassName);
@@ -133,6 +133,8 @@ const MenuItems: React.FC = memo(() => {
             pageRouters.push(dataItem)
         }
 
+        console.log("dataItem ===>", dataItem);
+
         setPageRouters(JSON.parse(JSON.stringify(pageRouters)))
         // setActiveRouter(dataItem);
         HistoryStorage.setSessionItem("ActiveRouter", dataItem);
@@ -176,7 +178,7 @@ const MenuItems: React.FC = memo(() => {
                         {
                             haveMore ?
                                 <span className='more'>
-                                    <EllipsisOutlined />
+                                    {/* <EllipsisOutlined /> */}
                                     <FileAddOutlined onClick={(e) => addPageRouterHandler(e, v)} />
                                 </span> : <></>
                         }
@@ -201,7 +203,13 @@ const MenuItems: React.FC = memo(() => {
     }, [pageRouters])
 
     const systemMenu = useMemo(() => {
-        return menuHandler(_router)
+        console.log("_router", _router, userInfo);
+
+        return menuHandler(_router.filter(v => {
+            if (v.label === "用户中心") return userInfo.permission && userInfo.permission.includes("all") ? true : false;
+
+            return true
+        }))
     }, [_router])
 
     useEffect(() => {
@@ -223,7 +231,9 @@ const MenuItems: React.FC = memo(() => {
 });
 
 export default () => {
-    const [userName, setUserName] = useState("HuYu")
+    const userInfo = HistoryStorage.getSessionItem("userInfo")
+
+    const [userName, setUserName] = useState("HUYU")
     const collapsed = useMenuStore((state) => state.collapsed);
 
     const nameBox = useMemo(() => <div className='first-name'>{userName[0]}</div>, [userName])
@@ -248,6 +258,12 @@ export default () => {
             dom.onmouseleave = null
         }
     }
+
+    useEffect(() => {
+        console.log("userInfo", userInfo);
+
+        setUserName(userInfo?.username);
+    }, [userInfo])
 
     useEffect(() => {
         initRootMenuEventHandler()

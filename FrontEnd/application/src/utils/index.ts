@@ -146,3 +146,28 @@ export class Utils {
     return this.#utils.getActions()["application"];
   }
 }
+
+/**
+ * @function findObjectByPath 查找路径
+ * @param data 
+ * @param path 
+ * @returns 
+ */
+export const findObjectByPath = (data: any, path: string) => {
+  const search = (currentData: any, targetPath: string) => {
+    for (const item of currentData) {
+      if (item.path === targetPath) {
+        return item;
+      }
+      if (item.children) {
+        const foundItem: any = search(item.children, targetPath);
+        if (foundItem) {
+          return foundItem;
+        }
+      }
+    }
+    return null;
+  }
+
+  return search(data, path);
+}

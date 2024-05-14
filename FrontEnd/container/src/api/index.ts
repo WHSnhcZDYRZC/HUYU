@@ -3,7 +3,7 @@ import HistoryStorage from "@/utils/HistoryStorage";
 import { message } from 'antd';
 
 const Request = axios.create({
-    baseURL: process.env.UMI_APP_BASE_API + 'api',
+    baseURL: process.env.UMI_APP_BASE_API + '/api',
     timeout: process.env.UMI_APP_TIME_OUT_PERIOD as any,
 })
 
@@ -17,7 +17,11 @@ const errorHandler = (error: any) => {
 
     switch (error.response.status) {
         case ErrorType.UNAUTHORIZED:
+            const layoutItem = HistoryStorage.getItem('layout');
             HistoryStorage.clear()
+            if (layoutItem) {
+                HistoryStorage.setItem('layout', layoutItem);
+            }
             location.reload();
             break;
         default:

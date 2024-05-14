@@ -46,6 +46,23 @@ export default function DragDropPaste(): null {
             console.log(error);
           }
         })();
+        // (async () => {
+        //   const filesResult = await mediaFileReader(
+        //     files,
+        //     [ACCEPTABLE_IMAGE_TYPES].flatMap((x) => x),
+        //   );
+
+        //   console.log("filesResult", filesResult);
+
+        //   for (const { file, result } of filesResult) {
+        //     if (isMimeType(file, ACCEPTABLE_IMAGE_TYPES)) {
+        //       editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+        //         altText: file.name,
+        //         src: result,
+        //       });
+        //     }
+        //   }
+        // })();
         return true;
       },
       COMMAND_PRIORITY_LOW,

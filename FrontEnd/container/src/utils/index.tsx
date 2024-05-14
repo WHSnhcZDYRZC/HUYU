@@ -245,3 +245,7 @@ export const transformData = (sourceData: any) => {
 
   return transformedData;
 }
+
+export const classNameJoin = (...classNames: string[]) => {
+  return classNames.filter(Boolean).join(' ');
+}

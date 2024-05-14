@@ -12,7 +12,7 @@ import { CollaborationPlugin } from '@lexical/react/LexicalCollaborationPlugin';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
 
 import { createWebsocketProvider } from './collaboration';
@@ -75,6 +75,8 @@ import TwitterPlugin from './plugins/TwitterPlugin';
 import YouTubePlugin from './plugins/YouTubePlugin';
 import styled from './Editor.less'
 import InitPlugin from './plugins/InitPlugin';
+import OptionsPlugin from './plugins/OptionsPlugin';
+import HistoryStorage from '@/utils/HistoryStorage';
 
 export const CAN_USE_DOM: boolean =
     typeof window !== 'undefined' &&
@@ -173,7 +175,7 @@ const RichTextDom = () => {
     )
 }
 
-export default function Editor(): JSX.Element {
+function Editor(): JSX.Element {
     const { historyState } = useSharedHistoryContext();
     const {
         settings: {
@@ -270,14 +272,16 @@ export default function Editor(): JSX.Element {
                                 <ComponentPickerPlugin />
                                 <EmojiPickerPlugin />
                                 <AutoEmbedPlugin />
-
                                 <MentionsPlugin />
                                 <EmojisPlugin />
                                 <HashtagPlugin />
                                 <KeywordsPlugin />
                                 <SpeechToTextPlugin />
-
                                 <InitPlugin />
+
+                                {/* 导入、导出、删除 */}
+                                <OptionsPlugin />
+
                                 {/* <AutoLinkPlugin /> */}
 
                                 <>
@@ -305,15 +309,6 @@ export default function Editor(): JSX.Element {
                                         ErrorBoundary={LexicalErrorBoundary}
                                     />
 
-                                    <MarkdownShortcutPlugin />
-                                    <CodeHighlightPlugin />
-                                    <ListPlugin />
-                                    <CheckListPlugin />
-                                    <ListMaxIndentLevelPlugin maxDepth={7} />
-                                    <TablePlugin
-                                        hasCellMerge={tableCellMerge}
-                                        hasCellBackgroundColor={tableCellBackgroundColor}
-                                    />
                                     <TableCellResizer />
                                     <NewTablePlugin cellEditorConfig={cellEditorConfig}>
                                         <AutoFocusPlugin />
@@ -375,3 +370,5 @@ export default function Editor(): JSX.Element {
         </div>
     );
 }
+
+export default memo(Editor);

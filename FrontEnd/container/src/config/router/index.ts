@@ -1,9 +1,9 @@
-import { DownOutlined, FileWordOutlined, HomeOutlined, RightOutlined, SettingOutlined, UpOutlined } from '@ant-design/icons';
+import { DownOutlined, FileWordOutlined, HomeOutlined, RightOutlined, SettingOutlined, UpOutlined, UserOutlined } from '@ant-design/icons';
 
 export default [
     {
         path: '/',
-        redirect: '/application/',
+        redirect: '/personal',
     },
     {
         name: '个人中心',
@@ -13,9 +13,21 @@ export default [
     },
     {
         name: '系统中心',
-        path: '/system',
+        path: '/system/',
         microApp: 'system',
         icon: SettingOutlined,
+        routes: [
+            {
+                path: '/system/*',
+                microApp: 'system',
+            },
+        ],
+    },
+    {
+        name: '用户中心',
+        path: '/system/userManagement',
+        microApp: 'system',
+        icon: UserOutlined,
     },
     {
         name: '文章中心',

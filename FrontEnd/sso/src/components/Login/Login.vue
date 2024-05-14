@@ -1,13 +1,13 @@
 <template>
   <a-layout class="container">
     <div class="logo">
-      <img :src="LOGO" alt="" srcset="" />
+      <img src="http://192.168.200.131:9000/huyu/2024/04/29/icon.svg" alt="" srcset="" />
       <span>HuYu</span>
     </div>
 
     <a-layout-content :style="contentStyle">
       <a-form ref="form" class="huyu-form" :model="formState" name="basic" autocomplete="off" @finish="onFinish" @finishFailed="onFinishFailed">
-        <h1>登录/注册 HuYu</h1>
+        <h1>{{ isLogin ? '登录' : '注册' }} HuYu</h1>
         <a-form-item name="phone" :rules="[{ required: true, message: '请输入手机号！' }]">
           <a-input-group size="large" compact>
             <a-select style="width: 30%" v-model:value="formState.region">
@@ -27,10 +27,12 @@
         </a-form-item>
 
         <a-form-item v-if="isNext">
-          <a-button class="huyu-btn" type="primary" danger html-type="submit">登录</a-button>
-          <span class="code" @click="changeCodeHandler">
+          <!-- <a-button class="huyu-btn" type="primary" danger html-type="submit">登录</a-button> -->
+          <a-button class="huyu-btn" type="primary" danger html-type="submit">{{ isLogin ? '登录' : '注册' }}</a-button>
+          <!-- <span class="code" @click="changeCodeHandler">
             您也可以 使用<span>{{ isCode ? '账号密码' : '验证码登录' }}</span></span
-          >
+          > -->
+          <span class="code" @click="() => (isLogin = !isLogin)"> {{ isLogin ? '没有用户名？点击注册 ' : '切换登录' }}</span>
         </a-form-item>
 
         <a-form-item v-else>
@@ -47,11 +49,11 @@
 
 <script setup lang="ts">
 import { CSSProperties, reactive, ref } from 'vue';
-import LOGO from '@/assets/icon/icon.svg';
+// import LOGO from '@/assets/icon/icon.svg';
 import { message } from 'ant-design-vue';
-import { loginApi } from '@/api/user';
+import { loginApi, getUserInfo, register } from '@/api/user';
 import HistoryStorage from '@/utils/HistoryStorage';
-import { Utils } from '@/utils';
+import { Utils, getUUID } from '@/utils';
 
 const contentStyle: CSSProperties = {
   textAlign: 'center',
@@ -71,6 +73,7 @@ interface FormState {
 const form = ref<any>(null);
 const isNext = ref(false);
 const isCode = ref(false);
+const isLogin = ref(true);
 
 const formState = reactive<FormState>({
   phone: '',
@@ -81,12 +84,36 @@ const formState = reactive<FormState>({
 });
 const onFinish = () => {
   verifyHandler(async () => {
-    const { code, data } = await loginApi(formState);
-    if (code === 200) {
-      HistoryStorage.setItem('token', data);
-      Utils.getUtils().changeRouter('/application');
+    if (isLogin.value) {
+      const { code, data } = await loginApi(formState);
+      if (code === 200) {
+        HistoryStorage.setItem('token', data);
+        const { data: userInfo } = await getUserInfo();
+        HistoryStorage.setSessionItem('userInfo', userInfo);
+        Utils.getUtils().changeRouter('/personal');
+      }
+    } else {
+      const { code, data } = await register({
+        ...formState,
+        flag: 0,
+        permission: null,
+        status: 0,
+        sex: 2,
+        image: null,
+        username: getUUID(5),
+      });
+
+      if (code === 200) {
+        message.success('注册成功，请登录!');
+        reset();
+      }
     }
   });
+};
+
+const reset = () => {
+  formState.phone = "";
+  formState.password = "";
 };
 
 const onFinishFailed = (errorInfo: any) => {

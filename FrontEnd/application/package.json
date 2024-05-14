@@ -10,6 +10,7 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.7",
     "@excalidraw/excalidraw": "^0.15.3",
     "@lexical/clipboard": "0.12.2",
     "@lexical/code": "0.12.2",
@@ -36,6 +37,7 @@
     "dayjs": "^1.11.10",
     "katex": "^0.15.2",
     "lexical": "^0.12.2",
+    "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "prettier": "^2.3.2",
     "qiankun": "^2.10.14",

@@ -1,5 +1,6 @@
+import { deleteArticleMenu, getArticleMenu } from '@/api/active';
 import useMenuStore, { MenuItemInf, MenuStateInf } from '@/store/menuStore';
-import { findObjectByPath } from '@/utils';
+import { findObjectByPath, transformData } from '@/utils';
 import HistoryStorage from '@/utils/HistoryStorage';
 import { initGlobalState } from 'qiankun';
 import { history } from 'umi'
@@ -15,12 +16,10 @@ let state = {
     setBreadcrumb: (titleStr: string = "HuYu 笔记") => {
       const _pageRouters = useMenuStore.getState().pageRouters
       const activeRouter = findObjectByPath(_pageRouters, history.location.pathname)
-
       document.title = titleStr;
       activeRouter.label = titleStr;
       useMenuStore.setState({ breadcrumb: titleStr })
       useMenuStore.setState({ pageRouters: JSON.parse(JSON.stringify(_pageRouters)) })
-
       const ss = HistoryStorage.getSessionItem("ActiveRouter")
       HistoryStorage.setSessionItem("ActiveRouter", { ...ss, label: titleStr })
     },
@@ -28,15 +27,34 @@ let state = {
     // getActiveRouter: () => useMenuStore.getState().activeRouter,
     setActiveRouter: () => {
       const activeRouter = HistoryStorage.getSessionItem("ActiveRouter")
-
       if (!activeRouter.id) return;
-
       const _pageRouters = useMenuStore.getState().pageRouters
       const router = findObjectByPath(_pageRouters, activeRouter.path)
       router.id = activeRouter.id;
       router.key = activeRouter.id;
       useMenuStore.setState({ pageRouters: JSON.parse(JSON.stringify(_pageRouters)) })
+    },
 
+    deleteActive: async () => {
+      const res: any = await deleteArticleMenu({
+        url: window.location.pathname
+      });
+
+      if (res.code === 200) {
+        const { data } = await getArticleMenu({
+          id: HistoryStorage.getSessionItem("userInfo")?.id
+        })
+
+        HistoryStorage.setSessionItem("ActiveRouter", {})
+
+        setTimeout(() => {
+          useMenuStore.setState({
+            pageRouters: transformData(data)
+          })
+
+          history.push("/personal");
+        }, 100);
+      }
     }
   }
 };

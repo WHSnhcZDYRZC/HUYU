@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 
@@ -12,7 +13,10 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 
 // 集成 Mybatis-plus， 扫描 Mapper
-@MapperScan(value = {"com.huyu.article.mapper"})
+@MapperScan(value = {"huyu.article", "com.huy.tess4j"})
+
+// 开启异步调用
+@EnableAsync
 public class ArticleApplication {
     public static void main(String[] args) {
         SpringApplication.run(ArticleApplication.class, args);

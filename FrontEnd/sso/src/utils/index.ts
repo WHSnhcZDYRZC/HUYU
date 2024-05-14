@@ -98,7 +98,7 @@ export const convertToCurrencyFormat = (num: number): string | any => {
 }
 
 // export const copyTextToClipboard = (text: string) =>
-  // navigator.clipboard.writeText(text).then(() => message.success("复制成功!"));
+// navigator.clipboard.writeText(text).then(() => message.success("复制成功!"));
 
 
 export const $ = (keyword: string) => document.querySelector(keyword);
@@ -135,14 +135,26 @@ export class Utils {
   static #utils = null
 
   static initUtils(props) {
-      this.#utils = props;
+    this.#utils = props;
 
-      this.#utils.onGlobalStateChange((state, prev) => {
-          console.log("personalCenter:", state, prev);
-      });
+    this.#utils.onGlobalStateChange((state, prev) => {
+      console.log("personalCenter:", state, prev);
+    });
   }
 
   static getUtils() {
-      return this.#utils.getActions()["sso"];
+    return this.#utils.getActions()["sso"];
   }
+}
+
+export const getUUID = (length = 10) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters[randomIndex];
+  }
+
+  return result;
 }

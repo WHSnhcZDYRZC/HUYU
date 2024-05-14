@@ -1,4 +1,12 @@
+import HistoryStorage from "@/utils/HistoryStorage";
+
 export const defaultData = () => {
+    const layoutItem = HistoryStorage.getItem("layout");
+
+    console.log("layoutItem", layoutItem);
+
+    const str = layoutItem ? `font-size: ${layoutItem.fontSize}px; color: ${layoutItem.color}` : "";
+
     return ` {
         "editorState": {
             "root": {
@@ -9,7 +17,7 @@ export const defaultData = () => {
                                 "detail": 0,
                                 "format": 0,
                                 "mode": "normal",
-                                "style": "",
+                                "style": "${str}",
                                 "text": "新页面",
                                 "type": "text",
                                 "version": 1

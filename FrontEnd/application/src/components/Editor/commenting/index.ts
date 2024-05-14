@@ -306,11 +306,9 @@ export class CommentStore {
 
           if (shouldConnect) {
             // eslint-disable-next-line no-console
-            console.log('Comments connected!');
             connect();
           } else {
             // eslint-disable-next-line no-console
-            console.log('Comments disconnected!');
             disconnect();
           }
         }

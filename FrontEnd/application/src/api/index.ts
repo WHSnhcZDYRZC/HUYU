@@ -3,7 +3,7 @@ import HistoryStorage from "@/utils/HistoryStorage";
 import { message } from 'antd';
 
 const Request = axios.create({
-    baseURL: process.env.UMI_APP_BASE_API + 'api',
+    baseURL: process.env.UMI_APP_BASE_API + '/api',
     timeout: process.env.UMI_APP_TIME_OUT_PERIOD as any,
 })
 

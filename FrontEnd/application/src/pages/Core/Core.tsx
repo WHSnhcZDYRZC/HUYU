@@ -1,13 +1,13 @@
 import styled from './Core.less';
 import Editor from '@/components/Editor/Editor';
-import { SettingsContext, useSettings } from '@/components/Editor/context/SettingsContext';
-import { Utils } from '@/utils';
+import { findObjectByPath, Utils } from '@/utils';
 import HistoryStorage from '@/utils/HistoryStorage';
-import { Skeleton } from 'antd';
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import activeStore from '@/store';
 import { getArticleContent, saveOrUpdate } from '@/api/active';
 import { defaultData } from '@/components/Editor/plugins/InitPlugin/InitData';
+import LifeCycleHOC from '@/Hoc/LifeCycleHOC';
+import { Dropdown, Skeleton, Button } from 'antd';
 
 export interface articleSaveParams {
     id: string
@@ -18,8 +18,8 @@ export interface articleSaveParams {
     routerPath: string
 }
 
-const Core: React.FC = () => {
-    const { setActiveRouter } = Utils.getUtils()
+const Core = (_: any, ref: any) => {
+    const { setActiveRouter } = Utils.getUtils();
 
     const _articleContent = activeStore((state: any) => state.articleContent)
     const setArticleContent = activeStore((state: any) => state.setArticleContent)
@@ -30,11 +30,13 @@ const Core: React.FC = () => {
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         initHandler();
+    }, []);
 
-        return () => {
+    useImperativeHandle(ref, () => ({
+        componentWillUnmount() {
             activeRouterSaveHandler(0)
-        }
-    }, [])
+        },
+    }));
 
     const articleContent = useRef("");
     useEffect(() => {
@@ -42,35 +44,46 @@ const Core: React.FC = () => {
     }, [_articleContent])
 
     const activeRouterSaveHandler = async (num: number) => {
-        if (!activeRouter.path) return;
+        if (!HistoryStorage.getSessionItem("ActiveRouter").path) return;
 
         setLoading(true)
         try {
+            const imageList = document.querySelector(".ContentEditable__root")?.querySelectorAll("img");
+
+            console.log("data2", articleContent);
+
             const params: articleSaveParams = {
                 ...activeRouter,
                 userId: user.id,
                 userName: user.username,
                 articleContent: articleContent.current || defaultData(),
-                title: activeRouter.label,
-                routerPath: activeRouter.path
+                title: activeRouter.label || activeRouter.title,
+                routerPath: activeRouter.path,
+                imagesUrl: imageList?.length ? [...imageList].map(v => v.src) : null
             }
 
-            const { code, data } = await saveOrUpdate(params)
-            if (code === 200) {
-                activeRouter = {
-                    ...activeRouter,
-                    id: data.id,
-                    key: data.id
-                }
-                
-                if (!params.id) {
-                    HistoryStorage.setSessionItem("ActiveRouter", activeRouter);
-                }
-                if (num) {
-                    setArticleContent(data.articleContent)
-                }
-                setActiveRouter();
+            const { data } = await saveOrUpdate(params)
+
+            activeRouter = {
+                ...activeRouter,
+                id: data.id,
+                key: data.id,
+                label: data.title,
+                path: data.routerPath
             }
+
+            if (!params.id) {
+                HistoryStorage.setSessionItem("ActiveRouter", activeRouter);
+            }
+
+            if (!num) {
+                setArticleContent("");
+            }
+
+            setActiveRouter();
+        } catch (error) {
+            console.log("core error:", error);
+
         } finally {
             setTimeout(() => setLoading(false), 500)
         }
@@ -83,7 +96,11 @@ const Core: React.FC = () => {
             const { code, data } = await getArticleContent(activeRouter.id)
 
             if (code === 200) {
-                setArticleContent(data.articleContent)
+                Promise.resolve().then(() => {
+                    setTimeout(() => {
+                        setArticleContent(data.articleContent)
+                    }, 50);
+                })
             }
         } finally {
             setTimeout(() => setLoading(false), 500)
@@ -115,4 +132,4 @@ const Core: React.FC = () => {
     );
 }
 
-export default Core;
+export default LifeCycleHOC(forwardRef(Core));

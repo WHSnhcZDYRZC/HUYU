@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {$wrapNodeInElement, mergeRegister} from '@lexical/utils';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { $wrapNodeInElement, mergeRegister } from '@lexical/utils';
 import {
   $createParagraphNode,
   $createRangeSelection,
@@ -25,9 +25,9 @@ import {
   LexicalCommand,
   LexicalEditor,
 } from 'lexical';
-import {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
-import {CAN_USE_DOM} from '@/components/Editor/shared/src/canUseDOM';
+import { CAN_USE_DOM } from '@/components/Editor/shared/src/canUseDOM';
 
 import landscapeImage from '../../images/landscape.jpg';
 import yellowFlowerImage from '../../images/yellow-flower.jpg';
@@ -38,7 +38,7 @@ import {
   ImagePayload,
 } from '../../nodes/ImageNode';
 import Button from '../../ui/Button';
-import {DialogActions, DialogButtonsList} from '../../ui/Dialog';
+import { DialogActions, DialogButtonsList } from '../../ui/Dialog';
 import FileInput from '../../ui/FileInput';
 import TextInput from '../../ui/TextInput';
 
@@ -80,7 +80,7 @@ export function InsertImageUriDialogBody({
         <Button
           data-test-id="image-modal-confirm-btn"
           disabled={isDisabled}
-          onClick={() => onClick({altText, src})}>
+          onClick={() => onClick({ altText, src })}>
           Confirm
         </Button>
       </DialogActions>
@@ -130,7 +130,7 @@ export function InsertImageUploadedDialogBody({
         <Button
           data-test-id="image-modal-file-upload-btn"
           disabled={isDisabled}
-          onClick={() => onClick({altText, src})}>
+          onClick={() => onClick({ altText, src })}>
           Confirm
         </Button>
       </DialogActions>
@@ -174,14 +174,14 @@ export function InsertImageDialog({
               onClick(
                 hasModifier.current
                   ? {
-                      altText:
-                        'Daylight fir trees forest glacier green high ice landscape',
-                      src: landscapeImage,
-                    }
+                    altText:
+                      'Daylight fir trees forest glacier green high ice landscape',
+                    src: landscapeImage,
+                  }
                   : {
-                      altText: 'Yellow flower in tilt shift lens',
-                      src: yellowFlowerImage,
-                    },
+                    altText: 'Yellow flower in tilt shift lens',
+                    src: yellowFlowerImage,
+                  },
               )
             }>
             Sample
@@ -220,8 +220,6 @@ export default function ImagesPlugin({
       editor.registerCommand<InsertImagePayload>(
         INSERT_IMAGE_COMMAND,
         (payload) => {
-          console.log(payload);
-          
           const imageNode = $createImageNode(payload);
           $insertNodes([imageNode]);
           if ($isRootOrShadowRoot(imageNode.getParentOrThrow())) {
@@ -344,7 +342,7 @@ function getDragImageData(event: DragEvent): null | InsertImagePayload {
   if (!dragData) {
     return null;
   }
-  const {type, data} = JSON.parse(dragData);
+  const { type, data } = JSON.parse(dragData);
   if (type !== 'image') {
     return null;
   }
@@ -377,8 +375,8 @@ function getDragSelection(event: DragEvent): Range | null | undefined {
     target == null
       ? null
       : target.nodeType === 9
-      ? (target as Document).defaultView
-      : (target as Element).ownerDocument.defaultView;
+        ? (target as Document).defaultView
+        : (target as Element).ownerDocument.defaultView;
   const domSelection = getDOMSelection(targetWindow);
   if (document.caretRangeFromPoint) {
     range = document.caretRangeFromPoint(event.clientX, event.clientY);

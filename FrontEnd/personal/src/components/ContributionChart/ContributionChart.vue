@@ -5,29 +5,54 @@
 <script setup lang="ts">
 import * as echarts from 'echarts';
 import { onMounted } from 'vue';
+import { getArticleMenu } from '@/api/active';
+import HistoryStorage from '@/utils/HistoryStorage';
 
-function getVirtualData(year: string) {
+function getVirtualData(year: string, orgData: any) {
+  console.log('orgData', orgData);
+
   const date = +echarts.time.parse(year + '-01-01');
   const end = +echarts.time.parse(+year + 1 + '-01-01');
   const dayTime = 3600 * 24 * 1000;
   const data: [string, number][] = [];
   for (let time = date; time < end; time += dayTime) {
-    data.push([echarts.time.format(time, '{yyyy}-{MM}-{dd}', false), Math.floor(Math.random() * 10000)]);
+    const _ = orgData.reduce((pre, v) => {
+      if (time < v.updatedTime && time + dayTime > v.updatedTime) {
+        pre += v.editTimes;
+      }
+
+      return pre;
+    }, 0);
+
+    console.log('_', _, time);
+
+    data.push([echarts.time.format(time, '{yyyy}-{MM}-{dd}', false), Math.floor(_ || 0)]);
   }
+
   return data;
 }
 
-onMounted(() => {
+const getArticleMenuHandler = async () => {
+  const { code, data } = await getArticleMenu({
+    id: HistoryStorage.getSessionItem('userInfo')?.id,
+  });
+
+  if (code === 200) {
+    init(data);
+  }
+};
+
+const init = data => {
   var chartDom = document.getElementById('PersonalContributionChart')!;
   var myChart = echarts.init(chartDom);
   var option: echarts.EChartsOption;
 
   option = {
-    title: {
-      top: 30,
-      left: 'center',
-      text: 'Daily Step Count',
-    },
+    // title: {
+    //   top: 30,
+    //   left: 'center',
+    //   text: 'Daily Step Count',
+    // },
     tooltip: {
       position: 'top',
     },
@@ -42,8 +67,9 @@ onMounted(() => {
     // },
     visualMap: {
       min: 0,
-      max: 10000,
+      max: 50,
       calculable: true,
+      type: 'piecewise',
       orient: 'horizontal',
       left: 'center',
       bottom: '15%',
@@ -52,8 +78,8 @@ onMounted(() => {
       top: 120,
       left: 30,
       right: 30,
-      cellSize: ['auto', 13],
-      range: '2016',
+      cellSize: ['auto', 30],
+      range: '2024',
       itemStyle: {
         borderWidth: 0.5,
       },
@@ -62,11 +88,15 @@ onMounted(() => {
     series: {
       type: 'heatmap',
       coordinateSystem: 'calendar',
-      data: getVirtualData('2016'),
+      data: getVirtualData('2024', data),
     },
   };
 
   option && myChart.setOption(option);
+};
+
+onMounted(() => {
+  getArticleMenuHandler();
 });
 </script>
 

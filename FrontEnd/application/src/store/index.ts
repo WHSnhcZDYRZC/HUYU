@@ -1,4 +1,3 @@
-import { defaultData } from '@/components/Editor/plugins/InitPlugin/InitData';
 import { create } from 'zustand'
 
 export interface articleInf {
@@ -12,8 +11,6 @@ const articleStore = create<articleInf>((set) => ({
     articleTitle: document.title,
     articleContent: "",
     setArticleContent: (articleContent) => {
-        // console.log("articleContent 123", articleContent);
-
         set(() => ({ articleContent }))
     },
     setArticleTitle: (articleTitle) => {

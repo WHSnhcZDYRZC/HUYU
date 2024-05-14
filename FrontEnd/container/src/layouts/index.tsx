@@ -14,7 +14,11 @@ import useFullLoading from '@/store/fullLoadingStore';
 const WhiteList = ['/sso/', '/sso/login']
 
 const goLogin = () => {
+  const layoutItem = HistoryStorage.getItem('layout');
   HistoryStorage.clear();
+  if (layoutItem) {
+    HistoryStorage.setItem('layout', layoutItem);
+  }
   history.push("/sso/login");
 }
 
@@ -105,7 +109,7 @@ export default memo(() => {
           },
         }}
       >
-        {layout}
+        {isFullLoadingShow ? <></> : layout}
       </ConfigProvider>
     </>
   );
