@@ -10,7 +10,8 @@ public class ArticleVo extends Article {
      */
     private String articleContent;
 
-//    private String id;
-//
-//    private String userId;
+    /**
+     *  文章内容图片
+     */
+    private String[] imagesUrl;
 }

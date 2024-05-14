@@ -26,7 +26,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="HuYuNote" options="-parameters" />
+      <module name="HuYuNote" options="" />
       <module name="huyu-note-application" options="-parameters" />
       <module name="huyu-note-common" options="-parameters" />
       <module name="huyu-note-demo" options="-parameters" />

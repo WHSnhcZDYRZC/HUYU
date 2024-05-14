@@ -1,4 +1,4 @@
-package com.huyu.article.interceptor;
+package com.huyu.user.interceptor;
 
 import com.huy.thread.ThreadLocalUtil;
 import com.huyu.model.personal.pojos.User;

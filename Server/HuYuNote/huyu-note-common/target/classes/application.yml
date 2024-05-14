@@ -1,2 +1,6 @@
 redisson:
   address: "redis://192.168.200.131:6379"
+
+tess4j:
+  data-path: D:\HuYu\Server\HuYuNote\huyu-note-common\src\main\resources
+  language: chi_sim

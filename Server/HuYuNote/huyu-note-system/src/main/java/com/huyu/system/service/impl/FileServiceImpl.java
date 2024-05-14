@@ -4,6 +4,7 @@ import com.alibaba.cloud.commons.lang.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huy.fileStarter.service.FileStorageService;
+import com.huy.thread.ThreadLocalUtil;
 import com.huyu.model.common.dtos.ResponseResult;
 import com.huyu.model.common.enums.AppHttpCodeEnum;
 import com.huyu.model.system.pojos.File;
@@ -63,8 +64,10 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
         ArrayList arr = new ArrayList<>();
         try {
             for (MultipartFile file : files) {
-                String url = fileStorageService.uploadImgFile("", file.getOriginalFilename(), file.getInputStream());
-                arr.add(new FileVo(file.getOriginalFilename(), url));
+                String fileName = file.getOriginalFilename() + System.currentTimeMillis();
+
+                String url = fileStorageService.uploadImgFile("", fileName, file.getInputStream());
+                arr.add(new FileVo(fileName, url));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -104,7 +107,6 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
         if (file == null) {
             return ResponseEntity.status(AppHttpCodeEnum.WARN_FILE.getCode()).body(ResponseResult.errorResult(AppHttpCodeEnum.WARN_FILE));
         } else {
-            file.setUpdatedTime(new Date());
             fileMapper.updateById(file);
             return ResponseEntity.ok(ResponseResult.setAppHttpCodeEnum(AppHttpCodeEnum.SUCCESS_FILE_EXIST));
         }
@@ -178,10 +180,11 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
 
     @Override
     public ResponseEntity getFileList(String fileName, String createdTime, String endTime) {
+        Integer id = ThreadLocalUtil.getUser().getId();
         System.out.println(fileName + createdTime + endTime);
 
         LambdaQueryWrapper<File> lqw = new LambdaQueryWrapper();
-        lqw.like(fileName != null, File::getName, fileName);
+        lqw.eq(File::getUserId, id).like(fileName != null, File::getName, fileName);
 
         if (StringUtils.isNotEmpty(createdTime)) {
             lqw.ge(File::getCreatedTime, createdTime).le(File::getCreatedTime, endTime);

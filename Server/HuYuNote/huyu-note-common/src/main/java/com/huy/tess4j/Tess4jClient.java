@@ -1,4 +1,4 @@
-package com.heima.common.tess4j;
+package com.huy.tess4j;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -23,10 +23,4 @@ public class File extends BasePojo {
 
     @TableField(value = "user_id", fill = FieldFill.INSERT)
     private Integer userId;
-
-    @TableField(value = "created_time", fill = FieldFill.INSERT)
-    private Date createdTime;
-
-    @TableField("updated_time")
-    private Date updatedTime;
 }

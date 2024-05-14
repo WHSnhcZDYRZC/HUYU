@@ -71,6 +71,12 @@ public class User extends BasePojo {
     @TableField("flag")
     private Short flag;
 
+    /**
+     * permission 权限字符
+     */
+    @TableField("permission")
+    private String permission;
+
     @TableLogic
     @TableField("isDelect")
     private Short isDelect;

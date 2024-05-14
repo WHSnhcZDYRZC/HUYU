@@ -4,6 +4,11 @@
       "name": "minio",
       "type": "com.huy.fileStarter.config.MinIOConfigProperties",
       "sourceType": "com.huy.fileStarter.config.MinIOConfigProperties"
+    },
+    {
+      "name": "tess4j",
+      "type": "com.huy.tess4j.Tess4jClient",
+      "sourceType": "com.huy.tess4j.Tess4jClient"
     }
   ],
   "properties": [
@@ -31,6 +36,16 @@
       "name": "minio.secret-key",
       "type": "java.lang.String",
       "sourceType": "com.huy.fileStarter.config.MinIOConfigProperties"
+    },
+    {
+      "name": "tess4j.data-path",
+      "type": "java.lang.String",
+      "sourceType": "com.huy.tess4j.Tess4jClient"
+    },
+    {
+      "name": "tess4j.language",
+      "type": "java.lang.String",
+      "sourceType": "com.huy.tess4j.Tess4jClient"
     }
   ],
   "hints": []
